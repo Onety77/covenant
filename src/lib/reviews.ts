@@ -1,4 +1,4 @@
-import type { Milestone, Project } from '@/types'
+import type { Milestone, Project, Verdict, Vote } from '@/types'
 import { projects } from '@/data/projects'
 
 export interface ReviewItem {
@@ -26,4 +26,10 @@ export function findReview(id: string): ReviewItem | undefined {
   const p = projects.find((x) => x.id === pid)
   const m = p?.covenant.milestones.find((x) => String(x.n) === mn)
   return p && m ? { id, project: p, milestone: m } : undefined
+}
+
+/** The panel as it stands, with your own verdict (cast this visit) in your seat. */
+export function withMine(panel: Vote[] = [], meId: string, mine?: { verdict: Verdict; note: string; at: number }): Vote[] {
+  if (!mine) return panel
+  return panel.map((v) => (v.verifierId === meId ? { verifierId: meId, verdict: mine.verdict, note: mine.note, at: new Date(mine.at).toISOString() } : v))
 }

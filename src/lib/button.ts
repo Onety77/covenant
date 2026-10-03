@@ -8,7 +8,7 @@ const variants: Record<Variant, string> = {
   ink: 'bg-ink text-bg hover-device:hover:opacity-90',
   secondary: 'border border-line-2 bg-surface text-ink hover-device:hover:bg-hover',
   ghost: 'text-ink-2 hover-device:hover:text-ink hover-device:hover:bg-hover',
-  danger: 'bg-default text-white hover-device:hover:brightness-110',
+  danger: 'bg-default text-on-default hover-device:hover:brightness-110',
 }
 const sizes: Record<Size, string> = {
   sm: 'h-8 px-3 text-[13px]',

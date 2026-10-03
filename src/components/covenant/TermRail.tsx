@@ -10,6 +10,8 @@ interface Props {
   now: number
   /** hide the value lanes (escrow, fees, bond) and show only the milestone track */
   lanes?: boolean
+  /** labels above each lane instead of beside it, for narrow columns */
+  stacked?: boolean
   className?: string
 }
 
@@ -18,7 +20,8 @@ interface Props {
  * and under them what the builder has put up. Held value is hatched, released value
  * solid, forfeited value red. Columns are proportional to each milestone's time.
  */
-export function TermRail({ covenant: c, now, lanes = true, className }: Props) {
+export function TermRail({ covenant: c, now, lanes = true, stacked = false, className }: Props) {
+  const side = !stacked
   const day = dayOf(c, now)
   const bounds = c.milestones.map((m, i) => [i ? c.milestones[i - 1].dueDay : 0, m.dueDay] as const)
   const cols = bounds.map(([a, b]) => `${b - a}fr`).join(' ')
@@ -28,8 +31,8 @@ export function TermRail({ covenant: c, now, lanes = true, className }: Props) {
 
   return (
     <div className={cn('min-w-0 pr-3', className)}>
-      <div className="grid gap-3 sm:grid-cols-[150px_1fr] sm:gap-4">
-        <div className="flex items-baseline justify-between gap-2 sm:block">
+      <div className={cn('grid gap-3', side && 'sm:grid-cols-[150px_1fr] sm:gap-4')}>
+        <div className={cn('flex items-baseline justify-between gap-2', side && 'sm:block')}>
           <p className="text-[12px] font-semibold">Roadmap</p>
           <p className="font-mono text-[11px] text-ink-3">{termNote(c, day)}</p>
         </div>
@@ -42,7 +45,7 @@ export function TermRail({ covenant: c, now, lanes = true, className }: Props) {
 
       {lanes && (
         <div className="mt-6 grid gap-4 border-t border-line pt-5">
-          <Lane label="Escrowed supply" value={`${c.escrowPct}% of supply`}>
+          <Lane side={side} label="Escrowed supply" value={`${c.escrowPct}% of supply`}>
             <div className="grid h-full gap-x-1" style={{ gridTemplateColumns: cols }}>
               {c.milestones.map((m) => {
                 const released = m.status === 'proven'
@@ -65,7 +68,7 @@ export function TermRail({ covenant: c, now, lanes = true, className }: Props) {
             </div>
           </Lane>
 
-          <Lane label="Creator fees" value={`${sol(c.feesSol)} · ${sol(c.feesReleasedSol)} out`}>
+          <Lane side={side} label="Creator fees" value={`${sol(c.feesSol)} · ${sol(c.feesReleasedSol)} out`}>
             <div className="relative h-full rounded-[5px] bg-sunken">
               {/* fees accrue as the term runs: released share solid, the rest hatched */}
               <div className="absolute inset-y-0 left-0 flex overflow-hidden rounded-[5px]" style={{ width: at(Math.max(day, 2)) }}>
@@ -77,11 +80,11 @@ export function TermRail({ covenant: c, now, lanes = true, className }: Props) {
             </div>
           </Lane>
 
-          <Lane label="Bond" value={sol(c.bondSol, 0)}>
+          <Lane side={side} label="Bond" value={sol(c.bondSol, 0)}>
             {defaulted && c.default ? (
               <div className="flex h-full gap-1">
                 <div className="hatch h-full rounded-[5px] border border-line-2 bg-surface" style={{ width: at(dayOf(c, now)) }} />
-                <div className="flex h-full min-w-0 flex-1 items-center rounded-[5px] bg-default px-2 text-[11px] font-semibold whitespace-nowrap text-white">
+                <div className="flex h-full min-w-0 flex-1 items-center rounded-[5px] bg-default px-2 text-[11px] font-semibold whitespace-nowrap text-on-default">
                   <span className="truncate">Forfeit to holders</span>
                 </div>
               </div>
@@ -97,7 +100,7 @@ export function TermRail({ covenant: c, now, lanes = true, className }: Props) {
             )}
           </Lane>
 
-          <div className="flex justify-between font-mono text-[11px] text-ink-3 sm:ml-[166px]">
+          <div className={cn('flex justify-between font-mono text-[11px] text-ink-3', side && 'sm:ml-[166px]')}>
             <span>Day 0 · {date(c.startedAt)}</span>
             <span>Day {TERM_DAYS} · {date(dueAt(c.startedAt, TERM_DAYS))}</span>
           </div>
@@ -145,11 +148,11 @@ function Stretch({ m, start, share }: { m: Milestone; start: string; share: numb
 function Gate({ m }: { m: Milestone }) {
   const style =
     m.status === 'proven'
-      ? 'bg-proven text-white border-proven'
+      ? 'bg-proven text-white border-proven dark:text-bg'
       : m.status === 'review'
-        ? 'bg-review text-white border-review'
+        ? 'bg-review text-white border-review dark:text-bg'
         : m.status === 'missed' || m.status === 'rejected'
-          ? 'bg-default text-white border-default'
+          ? 'bg-default text-white border-default dark:text-bg'
           : 'bg-surface text-ink-3 border-line-2'
   const Icon = m.status === 'proven' ? Check : m.status === 'review' ? Hourglass : m.status === 'missed' || m.status === 'rejected' ? X : null
   return (
@@ -162,10 +165,10 @@ function Gate({ m }: { m: Milestone }) {
   )
 }
 
-function Lane({ label, value, children }: { label: string; value: string; children: React.ReactNode }) {
+function Lane({ label, value, side, children }: { label: string; value: string; side: boolean; children: React.ReactNode }) {
   return (
-    <div className="grid gap-1.5 sm:grid-cols-[150px_1fr] sm:items-center sm:gap-4">
-      <div className="flex items-baseline justify-between gap-2 sm:block">
+    <div className={cn('grid gap-1.5', side && 'sm:grid-cols-[150px_1fr] sm:items-center sm:gap-4')}>
+      <div className={cn('flex items-baseline justify-between gap-2', side && 'sm:block')}>
         <p className="text-[12px] font-semibold">{label}</p>
         <p className="font-mono text-[11px] text-ink-3">{value}</p>
       </div>

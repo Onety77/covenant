@@ -38,6 +38,10 @@
   --default: #d22d23;
   --default-soft: rgb(210 45 35 / 0.09);
 
+  --contrast: #101114; /* inverted panels */
+  --on-contrast: #f6f6f3;
+  --on-default: #ffffff;
+
   --hatch: rgb(16 17 20 / 0.42);
   --shadow: 0 1px 1px rgb(16 17 20 / 0.03), 0 12px 32px -20px rgb(16 17 20 / 0.22);
   --overlay: rgb(16 17 20 / 0.45);
@@ -70,6 +74,10 @@
   --default: #ff5d52;
   --default-soft: rgb(255 93 82 / 0.13);
 
+  --contrast: #1d1f25;
+  --on-contrast: #f3f3f0;
+  --on-default: #1c0705;
+
   --hatch: rgb(243 243 240 / 0.4);
   --shadow: 0 0 0 1px rgb(255 255 255 / 0.03), 0 24px 60px -24px rgb(0 0 0 / 0.8);
   --overlay: rgb(0 0 0 / 0.65);
@@ -97,6 +105,9 @@
   --color-review-soft: var(--review-soft);
   --color-default: var(--default);
   --color-default-soft: var(--default-soft);
+  --color-contrast: var(--contrast);
+  --color-on-contrast: var(--on-contrast);
+  --color-on-default: var(--on-default);
   --shadow-card: var(--shadow);
 }
 

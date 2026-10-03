@@ -1,7 +1,7 @@
 import type { Vote } from '@/types'
 import { cn } from '@/lib/cn'
 import { ago } from '@/lib/format'
-import { getVerifier } from '@/data/verifiers'
+import { getVerifier, me } from '@/data/verifiers'
 import { Tag } from '@/components/ui/Tag'
 
 /** Each verifier on the panel, their verdict and their reason. */
@@ -16,6 +16,7 @@ export function PanelVotes({ panel, now, className }: { panel: Vote[]; now: numb
             <div className="min-w-0 flex-1">
               <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px]">
                 <span className="font-semibold">{who?.handle}</span>
+                {v.verifierId === me.id && <span className="text-ink-3">(you)</span>}
                 {v.verdict ? (
                   <Tag tone={v.verdict === 'approve' ? 'proven' : 'default'} dot={false} className="h-5 px-1.5 text-[11px]">
                     {v.verdict === 'approve' ? 'Approved' : 'Rejected'}

@@ -5,11 +5,16 @@ import { Header } from './Header'
 import { WalletCtx } from './wallet'
 
 export function Shell() {
-  const { pathname } = useLocation()
+  const { pathname, hash } = useLocation()
   const [address, setAddress] = useState<string | null>(null)
   const connect = () => setAddress((a) => (a ? null : '5uGv…r2Wd'))
 
-  useEffect(() => window.scrollTo(0, 0), [pathname])
+  // new page: top, unless the link points at a section (#redeem, #m2)
+  useEffect(() => {
+    const el = hash ? document.getElementById(hash.slice(1)) : null
+    if (el) el.scrollIntoView({ block: 'start' })
+    else window.scrollTo(0, 0)
+  }, [pathname, hash])
 
   return (
     <WalletCtx.Provider value={{ address, connect }}>

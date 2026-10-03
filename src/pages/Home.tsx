@@ -140,7 +140,7 @@ export function Home() {
       </section>
 
       <section aria-labelledby="limits" className="wrap pb-20 lg:pb-28">
-        <div className="grid gap-10 rounded-card bg-ink p-6 text-bg sm:p-10 lg:grid-cols-12 lg:p-14">
+        <div className="grid gap-10 rounded-card bg-contrast p-6 text-on-contrast sm:p-10 lg:grid-cols-12 lg:p-14">
           <div className="lg:col-span-5">
             <p className="font-mono text-[11px] tracking-[0.06em] uppercase opacity-60">Fee recovery</p>
             <h2 id="limits" className="mt-3 text-h2">One way in. Four doors it can’t open.</h2>
@@ -149,15 +149,15 @@ export function Home() {
               reach anything else.
             </p>
           </div>
-          <div className="grid gap-px self-start overflow-hidden rounded-[10px] bg-bg/15 sm:grid-cols-2 lg:col-span-7">
-            <div className="bg-ink p-5 sm:col-span-2">
+          <div className="grid gap-px self-start overflow-hidden rounded-[10px] bg-on-contrast/15 sm:grid-cols-2 lg:col-span-7">
+            <div className="bg-contrast p-5 sm:col-span-2">
               <p className="flex items-center gap-2 text-[15px] font-semibold">
                 <Check className="size-4 text-proven" strokeWidth={3} /> Can recover
               </p>
               <p className="mt-1 text-[14px] opacity-70">Stranded creator trading fees, back into the covenant’s fee vault.</p>
             </div>
             {['Locked liquidity', 'Builder bonds', 'Escrowed tokens', 'Holder funds'].map((k) => (
-              <p key={k} className="flex items-center gap-2 bg-ink p-5 text-[15px] font-semibold">
+              <p key={k} className="flex items-center gap-2 bg-contrast p-5 text-[15px] font-semibold">
                 <X className="size-4 text-default" strokeWidth={3} /> Can’t touch {k.toLowerCase()}
               </p>
             ))}

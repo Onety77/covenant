@@ -46,8 +46,8 @@ export function Stakes() {
           <p className="mt-3 text-[14px] leading-relaxed text-ink-2">{it.body}</p>
         </div>
       ))}
-      <div className="flex flex-col bg-ink p-5 text-bg sm:p-6">
-        <div className="flex h-8 items-center gap-2 rounded-[5px] border border-bg/25 px-3 font-mono text-[11px] opacity-80 sm:h-10" aria-hidden>
+      <div className="flex flex-col bg-contrast p-5 text-on-contrast sm:p-6">
+        <div className="flex h-8 items-center gap-2 rounded-[5px] border border-on-contrast/25 px-3 font-mono text-[11px] opacity-80 sm:h-10" aria-hidden>
           <Lock className="size-3.5" /> Permanent
         </div>
         <p className="mt-5 font-mono text-[11px] tracking-[0.06em] uppercase opacity-60">Liquidity</p>
