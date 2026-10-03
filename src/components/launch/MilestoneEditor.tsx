@@ -15,10 +15,10 @@ interface Props {
 export function MilestoneEditor({ n, value: m, start, errors, onChange }: Props) {
   const set = <K extends keyof DraftMilestone>(k: K, v: DraftMilestone[K]) => onChange({ ...m, [k]: v })
   return (
-    <fieldset className="rounded-card border border-line bg-surface p-5 sm:p-6">
+    <fieldset className="rounded-[16px] bg-surface p-4 sm:p-5">
       <legend className="sr-only">Milestone {n}</legend>
       <div className="flex items-center gap-3">
-        <span className="grid size-8 place-items-center rounded-[7px] bg-ink font-mono text-[12px] font-medium text-bg">M{n}</span>
+        <span className="grid size-8 place-items-center rounded-[7px] bg-accent font-mono text-[12px] font-medium text-on-accent">M{n}</span>
         <p className="text-[13px] text-ink-3">Releases 5% of supply when proven</p>
       </div>
       <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -38,12 +38,12 @@ export function MilestoneEditor({ n, value: m, start, errors, onChange }: Props)
       </div>
       <label className="mt-5 block">
         <span className="flex items-baseline justify-between">
-          <span className="text-[13px] font-semibold">Due</span>
+          <span className="label">Due</span>
           <span className="font-mono text-[13px] tabular">
             Day {m.dueDay} · {date(addDays(start, m.dueDay))}
           </span>
         </span>
-        <input type="range" name={`m${n}-due`} min={14} max={90} step={1} value={m.dueDay} onChange={(e) => set('dueDay', Number(e.target.value))} className="mt-3 w-full accent-[var(--blue)]" />
+        <input type="range" name={`m${n}-due`} min={14} max={90} step={1} value={m.dueDay} onChange={(e) => set('dueDay', Number(e.target.value))} className="mt-3 w-full accent-[var(--accent)]" />
         {errors.dueDay && <span className="mt-1 block text-[12px] text-default">{errors.dueDay}</span>}
       </label>
     </fieldset>

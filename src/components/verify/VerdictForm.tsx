@@ -23,9 +23,9 @@ export function VerdictForm({ cast, closed, onSubmit }: Props) {
 
   if (cast) {
     return (
-      <div className="rounded-card border border-line bg-surface p-5" role="status">
+      <div className="rounded-[16px] bg-surface p-4" role="status">
         <p className="label">Your verdict</p>
-        <p className={cn('mt-2 flex items-center gap-2 text-[20px] font-semibold', cast.verdict === 'approve' ? 'text-proven' : 'text-default')}>
+        <p className={cn('mt-2 flex items-center gap-2 font-display text-[20px] font-semibold tracking-[-0.03em]', cast.verdict === 'approve' ? 'text-proven' : 'text-default')}>
           {cast.verdict === 'approve' ? <Check className="size-5" strokeWidth={3} /> : <X className="size-5" strokeWidth={3} />}
           {cast.verdict === 'approve' ? 'Approved' : 'Rejected'}
         </p>
@@ -52,7 +52,7 @@ export function VerdictForm({ cast, closed, onSubmit }: Props) {
   }
 
   return (
-    <form onSubmit={submit} className="rounded-card border border-line bg-surface p-5" noValidate>
+    <form onSubmit={submit} className="rounded-[16px] bg-surface p-4" noValidate>
       <fieldset>
         <legend className="label">Your verdict</legend>
         <div className="mt-3 grid grid-cols-2 gap-2">
@@ -60,8 +60,8 @@ export function VerdictForm({ cast, closed, onSubmit }: Props) {
             <label
               key={v}
               className={cn(
-                'flex h-14 cursor-pointer items-center justify-center gap-2 rounded-control border text-[15px] font-semibold transition-colors has-focus-visible:outline-2 has-focus-visible:outline-blue',
-                verdict === v ? (v === 'approve' ? 'border-proven bg-proven-soft text-proven' : 'border-default bg-default-soft text-default') : 'border-line-2 text-ink-2 hover-device:hover:bg-hover',
+                'flex h-12 cursor-pointer items-center justify-center gap-2 rounded-[11px] text-[15px] font-semibold transition-colors has-focus-visible:outline-2 has-focus-visible:outline-accent',
+                verdict === v ? (v === 'approve' ? 'bg-proven text-[#04140b]' : 'bg-default text-on-default') : 'bg-raised text-ink-2 hover-device:hover:text-ink',
               )}
             >
               <input type="radio" name="verdict" value={v} checked={verdict === v} onChange={() => setVerdict(v)} className="sr-only" disabled={closed} />
@@ -80,11 +80,11 @@ export function VerdictForm({ cast, closed, onSubmit }: Props) {
           onChange={(e) => setNote(e.target.value)}
           disabled={closed}
           placeholder="What you checked, and whether it meets the measure as written."
-          className="mt-1.5 block w-full rounded-control border border-line-2 bg-surface p-3 text-[14px] leading-relaxed outline-none focus:border-blue"
+          className="mt-2 block w-full rounded-[11px] bg-raised p-3 text-[14px] leading-relaxed outline-none ring-1 ring-transparent focus:ring-accent"
         />
       </label>
       <label className="mt-3 flex items-start gap-2.5 text-[13px] text-ink-2">
-        <input type="checkbox" checked={checked} onChange={(e) => setChecked(e.target.checked)} className="mt-0.5 size-4 accent-[var(--blue)]" disabled={closed} />
+        <input type="checkbox" checked={checked} onChange={(e) => setChecked(e.target.checked)} className="mt-0.5 size-4 accent-[var(--accent)]" disabled={closed} />
         I checked the evidence against the measure as written, not against what the builder meant.
       </label>
       {error && (

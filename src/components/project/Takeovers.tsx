@@ -28,19 +28,19 @@ export function Takeovers({ project: p, now, onOffer }: Props) {
     <div>
       <ul className="grid gap-3">
         {offers.map((o) => (
-          <li key={o.id} className="rounded-card border border-line bg-surface p-5">
+          <li key={o.id} className="rounded-[14px] bg-surface p-4 sm:p-5">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <p className="text-[15px] font-semibold">{o.builder.handle}</p>
-              {o.mine && <span className="rounded-[5px] bg-blue-soft px-1.5 py-0.5 text-[11px] font-semibold text-blue-text">Your offer</span>}
+              {o.mine && <span className="rounded-[5px] bg-accent-soft px-1.5 py-0.5 font-mono text-[11px] text-accent uppercase">Your offer</span>}
               <span className="font-mono text-[11px] text-ink-3">{o.builder.wallet}</span>
               <span className="ml-auto inline-flex items-center gap-2 text-[12px] text-ink-2">
-                <span aria-hidden className="hatch h-3.5 w-5 rounded-[3px] border border-line-2" /> {o.bondSol} SOL bond posted
+                <span aria-hidden className="held h-3.5 w-5 rounded-[3px] bg-raised" /> {o.bondSol} SOL bond posted
               </span>
             </div>
             <p className="mt-2 text-[14px] leading-relaxed text-ink-2">{o.plan}</p>
             <ol className="mt-3 flex flex-wrap gap-2">
               {owed.map((m, i) => (
-                <li key={m.n} className="rounded-[6px] bg-sunken px-2.5 py-1 text-[12px]">
+                <li key={m.n} className="rounded-[6px] bg-raised px-2.5 py-1 text-[12px]">
                   <span className="font-mono text-ink-3">M{m.n}</span> {m.title} <span className="font-mono text-ink-3">· day {o.schedule[i]}</span>
                 </li>
               ))}
@@ -76,7 +76,7 @@ function OfferForm({ owed, onCancel, onSubmit }: { owed: string[]; onCancel: () 
 
   return (
     <form
-      className="rounded-card border border-blue/40 bg-surface p-5"
+      className="rounded-[14px] bg-surface p-4 sm:p-5"
       onSubmit={async (e) => {
         e.preventDefault()
         if (!address) return connect()
@@ -100,14 +100,14 @@ function OfferForm({ owed, onCancel, onSubmit }: { owed: string[]; onCancel: () 
           value={plan}
           onChange={(e) => setPlan(e.target.value)}
           placeholder="What you’ll do differently, and how you’ll hit the milestones still owed."
-          className="mt-1.5 block w-full rounded-control border border-line-2 bg-surface p-3 text-[14px] outline-none focus:border-blue"
+          className="mt-2 block w-full rounded-[11px] bg-raised p-3 text-[14px] outline-none ring-1 ring-transparent focus:ring-accent"
         />
       </label>
       <fieldset className="mt-4">
         <legend className="label">New deadlines, in days from takeover</legend>
         <div className="mt-2 grid gap-2 sm:grid-cols-2">
           {owed.map((t, i) => (
-            <label key={t} className="flex items-center gap-3 rounded-control border border-line-2 px-3 py-2">
+            <label key={t} className="flex items-center gap-3 rounded-[10px] bg-raised px-3 py-2">
               <span className="min-w-0 flex-1 truncate text-[13px]">{t}</span>
               <input
                 type="number"

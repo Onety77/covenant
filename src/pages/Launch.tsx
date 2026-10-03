@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Check, ChevronLeft, ImagePlus } from 'lucide-react'
+import { Check, ImagePlus } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { dayErrors, draftProject, emptyDraft, type Draft } from '@/lib/draft'
 import { sol } from '@/lib/format'
@@ -8,8 +7,8 @@ import { useNow } from '@/lib/live'
 import { BOND_SOL, ESCROW_PCT } from '@/lib/rules'
 import { Button } from '@/components/ui/Button'
 import { Field } from '@/components/ui/Field'
-import { TokenMark } from '@/components/ui/TokenMark'
-import { MiniRail } from '@/components/covenant/MiniRail'
+import { TokenArt } from '@/components/ui/TokenArt'
+import { Meter } from '@/components/covenant/Meter'
 import { TermRail } from '@/components/covenant/TermRail'
 import { MilestoneEditor } from '@/components/launch/MilestoneEditor'
 import { useWallet } from '@/components/layout/wallet'
@@ -87,22 +86,20 @@ export function Launch() {
 
   if (phase === 'done') {
     return (
-      <div className="wrap py-14 lg:py-20">
+      <div className="wrap pt-10 pb-28 lg:py-20">
         <div className="max-w-2xl">
-          <p className="label text-proven">Covenant signed</p>
+          <p className="font-mono text-[12px] text-proven uppercase">Covenant signed</p>
           <h1 className="mt-3 text-h1">
-            ${d.ticker} is live. <em className="italic">Day 0 of 90.</em>
+            ${d.ticker} is live. <span className="text-accent">Day 0 of 90.</span>
           </h1>
           <p className="mt-4 text-[16px] leading-relaxed text-ink-2">
             Your {BOND_SOL} SOL bond and {ESCROW_PCT}% of supply are held under the covenant, and every creator fee from here on is pledged to it. M1 is due on day {d.milestones[0].dueDay}.
           </p>
         </div>
-        <div className="mt-10 rounded-card border border-line bg-surface p-5 sm:p-6">
-          <TermRail covenant={preview.covenant} now={now} />
-        </div>
+        <TermRail covenant={preview.covenant} now={now} className="mt-10" />
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button variant="primary" to="/launches" arrow>
-            See it among launches
+          <Button variant="primary" to="/" arrow>
+            See it on the board
           </Button>
           <Button
             onClick={() => {
@@ -123,9 +120,9 @@ export function Launch() {
   return (
     <>
       {/* phones: the covenant you're writing stays in view */}
-      <div className="sticky top-16 z-30 border-b border-line bg-[color-mix(in_srgb,var(--bg)_92%,transparent)] backdrop-blur-md lg:hidden">
+      <div className="sticky top-14 z-30 border-b border-line bg-[color-mix(in_srgb,var(--bg)_94%,transparent)] backdrop-blur-md lg:hidden">
         <div className="wrap flex items-center gap-3 py-2.5">
-          <TokenMark ticker={preview.ticker} src={d.image} size={32} />
+          <TokenArt seed={preview.ticker} src={d.image} size={32} />
           <div className="min-w-0 flex-1">
             <p className="flex items-baseline justify-between gap-2">
               <span className="truncate text-[14px] font-semibold">{preview.name}</span>
@@ -133,18 +130,15 @@ export function Launch() {
                 Step {step + 1} of {steps.length}
               </span>
             </p>
-            <MiniRail covenant={preview.covenant} now={now} className="mt-1.5" />
+            <Meter covenant={preview.covenant} now={now} className="mt-2" />
           </div>
         </div>
       </div>
 
-      <div className="wrap pt-8 pb-20 lg:pt-12">
-        <Link to="/" className="inline-flex items-center gap-1 text-[13px] font-medium text-ink-3 hover-device:hover:text-ink">
-          <ChevronLeft className="size-4" /> Home
-        </Link>
-        <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
-          <h1 className="text-h1">Write your covenant.</h1>
-          <button type="button" onClick={() => setD(example)} className="text-[13px] font-semibold text-blue-text hover-device:hover:underline">
+      <div className="wrap pt-6 pb-28 lg:pt-12 lg:pb-16">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h1 className="text-h1">Launch a token</h1>
+          <button type="button" onClick={() => setD(example)} className="text-[13px] font-semibold text-accent hover-device:hover:underline">
             Fill with an example
           </button>
         </div>
@@ -159,7 +153,7 @@ export function Launch() {
                 aria-current={i === step ? 'step' : undefined}
                 className="group w-full text-left disabled:cursor-default"
               >
-                <span className={cn('block h-1 rounded-full', i < step ? 'bg-ink' : i === step ? 'bg-blue' : 'bg-line-2')} />
+                <span className={cn('block h-1 rounded-full', i < step ? 'bg-ink-2' : i === step ? 'bg-accent' : 'bg-line-2')} />
                 <span className={cn('mt-2 flex items-center gap-1.5 text-[13px] font-medium', i === step ? 'text-ink' : 'text-ink-3')}>
                   {i < step ? <Check className="size-3.5" strokeWidth={3} /> : <span className="font-mono text-[11px]">{i + 1}</span>}
                   <span className="max-sm:sr-only">{s}</span>
@@ -180,10 +174,10 @@ export function Launch() {
             noValidate
           >
             {step === 0 && (
-              <div className="grid gap-5 rounded-card border border-line bg-surface p-5 sm:p-6">
+              <div className="grid gap-6">
                 <div className="flex items-center gap-4">
-                  <TokenMark ticker={preview.ticker} src={d.image} size={64} />
-                  <label className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-control border border-line-2 px-3.5 text-[14px] font-semibold has-focus-visible:outline-2 has-focus-visible:outline-blue hover-device:hover:bg-hover">
+                  <TokenArt seed={preview.ticker} src={d.image} size={72} />
+                  <label className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-control bg-raised px-3.5 text-[14px] font-semibold has-focus-visible:outline-2 has-focus-visible:outline-accent">
                     <ImagePlus className="size-4" /> {d.image ? 'Change image' : 'Add image'}
                     <input
                       type="file"
@@ -211,7 +205,7 @@ export function Launch() {
                   />
                 </div>
                 <Field label="One line" name="tagline" value={d.tagline} onChange={(e) => setD({ ...d, tagline: e.target.value })} maxLength={60} hint="What you’re building, in the words holders will see first" error={tried ? tokenErrors.tagline : null} />
-                <p className="rounded-[8px] bg-sunken px-4 py-3 text-[13px] leading-relaxed text-ink-2">
+                <p className="text-[13px] leading-relaxed text-ink-3">
                   Launches as a Token-2022 token on Meteora’s bonding curve. 1B supply, metadata fixed at launch.
                 </p>
               </div>
@@ -243,13 +237,13 @@ export function Launch() {
                   [`${ESCROW_PCT}% of supply in escrow`, `Your allocation unlocks 5% per proven milestone. Unproven shares pass to a replacement builder after a default.`],
                   ['Every creator fee', 'Your share of trading fees goes into the covenant and is released with your milestones. On a default, unreleased fees go to holders.'],
                 ].map(([t, b], i) => (
-                  <label key={t} className={cn('flex cursor-pointer gap-4 rounded-card border bg-surface p-5 transition-colors', acks[i] ? 'border-ink' : 'border-line', tried && !acks[i] && 'border-default')}>
-                    <span aria-hidden className="hatch mt-0.5 h-10 w-12 shrink-0 rounded-[5px] border border-line-2" />
+                  <label key={t} className={cn('flex cursor-pointer gap-4 rounded-[14px] bg-surface p-4 ring-1 transition-shadow sm:p-5', acks[i] ? 'ring-accent' : 'ring-transparent', tried && !acks[i] && 'ring-default')}>
+                    <span aria-hidden className="held mt-0.5 h-10 w-12 shrink-0 rounded-[5px] bg-raised" />
                     <span className="min-w-0 flex-1">
                       <span className="block text-[16px] font-semibold">{t}</span>
                       <span className="mt-1 block text-[14px] leading-relaxed text-ink-2">{b}</span>
                     </span>
-                    <input type="checkbox" checked={acks[i]} onChange={(e) => setAcks(acks.map((a, j) => (j === i ? e.target.checked : a)))} className="mt-1 size-5 shrink-0 accent-[var(--blue)]" />
+                    <input type="checkbox" checked={acks[i]} onChange={(e) => setAcks(acks.map((a, j) => (j === i ? e.target.checked : a)))} className="mt-1 size-5 shrink-0 accent-[var(--accent)]" />
                   </label>
                 ))}
                 <p className="mt-2 text-[13px] text-ink-3">At graduation, the curve’s liquidity moves to a DAMM v2 pool and is locked permanently. That isn’t yours to stake; it belongs to the market.</p>
@@ -258,21 +252,21 @@ export function Launch() {
 
             {step === 3 && (
               <div className="grid gap-4">
-                <dl className="divide-y divide-line rounded-card border border-line bg-surface">
+                <dl className="divide-y divide-line">
                   {[
                     ['Token', `${d.name} · $${d.ticker}`],
                     ...d.milestones.map((m, i) => [`M${i + 1} · day ${m.dueDay}`, `${m.title}: ${m.target}`]),
                     ['You put up', `${BOND_SOL} SOL · ${ESCROW_PCT}% of supply · all creator fees`],
                     ['Wallet', address ? `${address} · ${sol(BALANCE)}` : 'Not connected'],
                   ].map(([k, v]) => (
-                    <div key={k} className="grid gap-1 px-5 py-3.5 sm:grid-cols-[150px_1fr] sm:gap-4">
+                    <div key={k} className="grid gap-1 py-3.5 sm:grid-cols-[150px_1fr] sm:gap-4">
                       <dt className="label pt-0.5">{k}</dt>
                       <dd className="text-[14px]">{v}</dd>
                     </div>
                   ))}
                 </dl>
-                <label className={cn('flex items-start gap-3 rounded-card border bg-surface p-5 text-[14px] leading-relaxed', tried && !final ? 'border-default' : 'border-line')}>
-                  <input type="checkbox" checked={final} onChange={(e) => setFinal(e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-[var(--blue)]" />
+                <label className={cn('flex items-start gap-3 rounded-[14px] bg-default-soft p-4 text-[14px] leading-relaxed ring-1 sm:p-5', tried && !final ? 'ring-default' : 'ring-transparent')}>
+                  <input type="checkbox" checked={final} onChange={(e) => setFinal(e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-[var(--default)]" />
                   If a deadline passes without approved proof, the covenant defaults on its own. I lose what’s still held, and nobody, including me, can stop it.
                 </label>
                 {phase === 'error' && (
@@ -310,9 +304,9 @@ export function Launch() {
           </form>
 
           <aside className="hidden lg:col-span-5 lg:block" aria-label="Preview">
-            <div className="sticky top-24 rounded-card border border-line bg-surface">
-              <div className="flex items-center gap-3 border-b border-line px-5 py-4">
-                <TokenMark ticker={preview.ticker} src={d.image} size={40} />
+            <div className="sticky top-24 rounded-[16px] bg-surface [--rail-bg:var(--surface)]">
+              <div className="flex items-center gap-3 px-5 pt-5">
+                <TokenArt seed={preview.ticker} src={d.image} size={48} />
                 <div className="min-w-0">
                   <p className="truncate text-[16px] font-semibold">
                     {preview.name} <span className="font-mono text-[12px] font-normal text-ink-3">${preview.ticker}</span>
@@ -323,7 +317,7 @@ export function Launch() {
               <div className="p-5">
                 <TermRail covenant={preview.covenant} now={now} stacked />
               </div>
-              <p className="border-t border-line px-5 py-3 text-[12px] text-ink-3">How holders will see your covenant</p>
+              <p className="px-5 pb-5 text-[12px] text-ink-3">This is how holders will see your covenant.</p>
             </div>
           </aside>
         </div>

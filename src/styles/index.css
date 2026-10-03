@@ -1,93 +1,50 @@
 @import "tailwindcss";
 
 /*
-  Covenant: promises with something behind them.
-  Neutrals, one ink blue for actions and the builder's commitments, and three verdict
-  tints (proven, in review, default). Value held under a covenant is drawn hatched,
-  released value solid, forfeited value red. Every colour is a role that switches with
-  the theme (.dark on <html>; light is the default).
+  Covenant: a launchpad where the roadmap is bonded.
+  One dark world. Near-black ground with a cool bias, hazard yellow for what's at stake
+  and for the one action that matters, and verdict colours (proven, in review, default)
+  that never double as the accent. Value held under a covenant is drawn in yellow
+  stripes, released value solid green, forfeited value red.
+  Layout rule: separate things with space and tone, not boxes. Panels only where
+  something is operated (trade, redeem, verdict).
 */
 
-@custom-variant dark (&:where(.dark, .dark *));
 @custom-variant hover-device (@media (hover: hover));
 
 :root {
-  color-scheme: light;
-  --bg: #f6f6f3;
-  --surface: #ffffff;
-  --raised: #fbfbf9;
-  --sunken: #eeeeea;
-  --hover: rgb(16 17 20 / 0.04);
-  --line: rgb(16 17 20 / 0.09);
-  --line-2: rgb(16 17 20 / 0.17);
-
-  --ink: #101114;
-  --ink-2: rgb(16 17 20 / 0.68);
-  --ink-3: rgb(16 17 20 / 0.5);
-  --ink-4: rgb(16 17 20 / 0.3);
-
-  --blue: #2440f0;
-  --blue-text: #1f37d6;
-  --blue-soft: rgb(36 64 240 / 0.08);
-  --on-blue: #ffffff;
-
-  --proven: #12804a;
-  --proven-soft: rgb(18 128 74 / 0.1);
-  --review: #a86400;
-  --review-soft: rgb(196 122 0 / 0.12);
-  --default: #d22d23;
-  --default-soft: rgb(210 45 35 / 0.09);
-
-  --contrast: #101114; /* inverted panels */
-  --on-contrast: #f6f6f3;
-  --on-default: #ffffff;
-
-  --hatch: rgb(16 17 20 / 0.42);
-  --shadow: 0 1px 1px rgb(16 17 20 / 0.03), 0 12px 32px -20px rgb(16 17 20 / 0.22);
-  --overlay: rgb(16 17 20 / 0.45);
-}
-
-.dark {
   color-scheme: dark;
-  --bg: #0b0c0e;
-  --surface: #131418;
-  --raised: #181a1f;
-  --sunken: #0f1013;
+  --bg: #0a0b0d;
+  --surface: #121418;
+  --raised: #1a1d22;
   --hover: rgb(255 255 255 / 0.04);
-  --line: rgb(255 255 255 / 0.08);
-  --line-2: rgb(255 255 255 / 0.16);
+  --line: rgb(255 255 255 / 0.07);
+  --line-2: rgb(255 255 255 / 0.13);
 
-  --ink: #f3f3f0;
-  --ink-2: rgb(243 243 240 / 0.68);
-  --ink-3: rgb(243 243 240 / 0.48);
-  --ink-4: rgb(243 243 240 / 0.28);
+  --ink: #f2f3f0;
+  --ink-2: rgb(242 243 240 / 0.68);
+  --ink-3: rgb(242 243 240 / 0.46);
+  --ink-4: rgb(242 243 240 / 0.26);
 
-  --blue: #5d74ff;
-  --blue-text: #8c9cff;
-  --blue-soft: rgb(93 116 255 / 0.14);
-  --on-blue: #ffffff;
+  --accent: #ffd60a;
+  --accent-soft: rgb(255 214 10 / 0.12);
+  --on-accent: #0a0b0d;
 
-  --proven: #3fca85;
-  --proven-soft: rgb(63 202 133 / 0.13);
-  --review: #f0ad3c;
-  --review-soft: rgb(240 173 60 / 0.13);
-  --default: #ff5d52;
-  --default-soft: rgb(255 93 82 / 0.13);
+  --proven: #3ddc84;
+  --proven-soft: rgb(61 220 132 / 0.12);
+  --review: #9aa8ff;
+  --review-soft: rgb(154 168 255 / 0.13);
+  --default: #ff4d4d;
+  --default-soft: rgb(255 77 77 / 0.12);
+  --on-default: #160303;
 
-  --contrast: #1d1f25;
-  --on-contrast: #f3f3f0;
-  --on-default: #1c0705;
-
-  --hatch: rgb(243 243 240 / 0.4);
-  --shadow: 0 0 0 1px rgb(255 255 255 / 0.03), 0 24px 60px -24px rgb(0 0 0 / 0.8);
-  --overlay: rgb(0 0 0 / 0.65);
+  --overlay: rgb(0 0 0 / 0.7);
 }
 
 @theme inline {
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-raised: var(--raised);
-  --color-sunken: var(--sunken);
   --color-hover: var(--hover);
   --color-line: var(--line);
   --color-line-2: var(--line-2);
@@ -95,73 +52,65 @@
   --color-ink-2: var(--ink-2);
   --color-ink-3: var(--ink-3);
   --color-ink-4: var(--ink-4);
-  --color-blue: var(--blue);
-  --color-blue-text: var(--blue-text);
-  --color-blue-soft: var(--blue-soft);
-  --color-on-blue: var(--on-blue);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
   --color-proven: var(--proven);
   --color-proven-soft: var(--proven-soft);
   --color-review: var(--review);
   --color-review-soft: var(--review-soft);
   --color-default: var(--default);
   --color-default-soft: var(--default-soft);
-  --color-contrast: var(--contrast);
-  --color-on-contrast: var(--on-contrast);
   --color-on-default: var(--on-default);
-  --shadow-card: var(--shadow);
 }
 
 @theme {
-  --font-sans: "Hanken Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Instrument Serif", ui-serif, Georgia, serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Unbounded Variable", "Geist Variable", ui-sans-serif, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", monospace;
 
-  --text-display: clamp(3.25rem, 1.9rem + 5.6vw, 6.5rem);
-  --text-display--line-height: 0.92;
-  --text-display--letter-spacing: -0.02em;
-  --text-h1: clamp(2.6rem, 1.9rem + 2.8vw, 4rem);
-  --text-h1--line-height: 0.98;
-  --text-h1--letter-spacing: -0.015em;
-  --text-h2: clamp(2.2rem, 1.6rem + 2.2vw, 3.4rem);
-  --text-h2--line-height: 1;
-  --text-h2--letter-spacing: -0.012em;
-  --text-h3: 1.1875rem;
-  --text-h3--line-height: 1.25;
-  --text-h3--letter-spacing: -0.015em;
-  --text-lead: clamp(1.0625rem, 0.95rem + 0.4vw, 1.1875rem);
-  --text-lead--line-height: 1.5;
-  --text-stat: clamp(1.375rem, 1.15rem + 0.8vw, 1.75rem);
-  --text-stat--line-height: 1.1;
-  --text-stat--letter-spacing: -0.02em;
+  --text-display: clamp(1.875rem, 1.2rem + 3vw, 3.75rem);
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.04em;
+  --text-h1: clamp(1.625rem, 1.2rem + 1.8vw, 2.5rem);
+  --text-h1--line-height: 1.05;
+  --text-h1--letter-spacing: -0.035em;
+  --text-h2: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  --text-h2--line-height: 1.15;
+  --text-h2--letter-spacing: -0.03em;
 
   --radius-card: 14px;
-  --radius-control: 9px;
+  --radius-control: 10px;
 }
 
 @utility tabular { font-variant-numeric: tabular-nums; }
 
 @utility wrap {
   width: 100%;
-  max-width: 1320px;
+  max-width: 1360px;
   margin-inline: auto;
   padding-inline: 16px;
-  @media (width >= 640px) { padding-inline: 32px; }
-  @media (width >= 1024px) { padding-inline: 40px; }
+  @media (width >= 640px) { padding-inline: 24px; }
+  @media (width >= 1024px) { padding-inline: 32px; }
 }
 
-/* Small mono caps: section labels, table heads, clause numbers */
+/* small mono caps: column heads, labels */
 @utility label {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   line-height: 1.4;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--ink-3);
 }
 
-/* Value held under a covenant: diagonal hatching in the current colour (set --hatch-c to tint) */
-@utility hatch {
-  background-image: repeating-linear-gradient(135deg, var(--hatch-c, var(--hatch)) 0 1px, transparent 1px 5px);
+/* value held under a covenant: hazard stripes in the accent */
+@utility held {
+  background-image: repeating-linear-gradient(-45deg, var(--held-c, rgb(255 214 10 / 0.75)) 0 2px, transparent 2px 6px);
+}
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
 }
 
 @layer base {
@@ -169,27 +118,21 @@
     background: var(--bg);
     color: var(--ink);
     font-family: var(--font-sans);
-    font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
     -webkit-tap-highlight-color: transparent;
   }
   body { min-height: 100svh; overflow-x: clip; background: var(--bg); }
   #root { min-height: 100svh; display: flex; flex-direction: column; }
   h1, h2, h3 { text-wrap: balance; }
-  /* the serif is for statements: page titles and section heads. Everything smaller stays in the sans. */
-  h1, h2 { font-family: var(--font-display); font-weight: 400; }
+  h1, h2 { font-family: var(--font-display); font-weight: 600; }
   p { text-wrap: pretty; }
-  ::selection { background: var(--blue); color: var(--on-blue); }
-  :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 6px; }
+  ::selection { background: var(--accent); color: var(--on-accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
   button:not(:disabled), [role="button"] { cursor: pointer; }
   input::placeholder, textarea::placeholder { color: var(--ink-4); }
 }
 
-/* In light, cards sit on the page with a soft lift instead of a hairline alone. */
-:root:not(.dark) .rounded-card.bg-surface { box-shadow: var(--shadow); }
-
-@keyframes skeleton { 50% { opacity: 0.55; } }
-.skeleton { background: var(--sunken); border-radius: 8px; animation: skeleton 1.6s ease-in-out infinite; }
+@keyframes skeleton { 50% { opacity: 0.5; } }
+.skeleton { background: var(--raised); border-radius: 8px; animation: skeleton 1.6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }

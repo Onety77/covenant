@@ -36,20 +36,20 @@ export function RedeemPanel({ project: p, now, onRedeem }: { project: Project; n
   }
 
   return (
-    <form onSubmit={submit} className="rounded-card border border-default/40 bg-surface p-5" id="redeem">
+    <form onSubmit={submit} className="rounded-[16px] bg-surface p-4 shadow-[inset_0_2px_0_var(--default)]" id="redeem">
       <p className="flex items-center justify-between">
         <span className="label text-default">Redemption open</span>
         <span className="font-mono text-[12px] text-ink-2 tabular">{closed ? 'Closed' : `closes in ${left(d.redemptionClosesAt, now)}`}</span>
       </p>
-      <p className="mt-3 font-display text-[40px] leading-none">{sol(d.poolSol)}</p>
+      <p className="mt-3 font-mono text-[34px] font-medium leading-none tracking-[-0.03em]">{sol(d.poolSol)}</p>
       <p className="mt-1.5 text-[13px] text-ink-2">Forfeited bond and pledged fees, for holders who burn ${p.ticker}. {pct(d.redeemedPct)} of supply redeemed so far.</p>
 
-      <dl className="mt-4 grid grid-cols-2 gap-px overflow-hidden rounded-[8px] border border-line bg-line text-[12px]">
-        <div className="bg-surface p-3">
+      <dl className="mt-4 grid grid-cols-2 gap-2 text-[12px]">
+        <div className="rounded-[10px] bg-raised p-3">
           <dt className="text-ink-3">Redeem 1M</dt>
           <dd className="mt-0.5 font-mono text-[13px]">{sol(rate * 1e6, 3)}</dd>
         </div>
-        <div className="bg-surface p-3">
+        <div className="rounded-[10px] bg-raised p-3">
           <dt className="text-ink-3">Sell 1M</dt>
           <dd className="mt-0.5 font-mono text-[13px]">{sol(marketPerM, 3)}</dd>
         </div>
@@ -59,12 +59,12 @@ export function RedeemPanel({ project: p, now, onRedeem }: { project: Project; n
         <span className="flex justify-between">
           <span className="label">You burn</span>
           {address && (
-            <button type="button" onClick={() => setAmount(String(balance))} className="font-mono text-[11px] text-blue-text">
+            <button type="button" onClick={() => setAmount(String(balance))} className="font-mono text-[11px] text-accent">
               Max {count(balance)}
             </button>
           )}
         </span>
-        <span className="mt-1.5 flex h-12 items-center rounded-control border border-line-2 bg-surface px-3 focus-within:border-default">
+        <span className="mt-2 flex h-14 items-center rounded-[11px] bg-raised px-3.5 ring-1 ring-transparent focus-within:ring-default">
           <input
             name="burn"
             inputMode="numeric"
@@ -75,7 +75,7 @@ export function RedeemPanel({ project: p, now, onRedeem }: { project: Project; n
               setAmount(e.target.value.replace(/\D/g, ''))
               setState('idle')
             }}
-            className="min-w-0 flex-1 bg-transparent font-mono text-[17px] outline-none"
+            className="min-w-0 flex-1 bg-transparent font-mono text-[20px] outline-none"
           />
           <span className="font-mono text-[13px] text-ink-3">{p.ticker}</span>
         </span>

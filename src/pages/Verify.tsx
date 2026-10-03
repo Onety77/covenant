@@ -9,10 +9,8 @@ import { decidedReviews, openReviews, withMine } from '@/lib/reviews'
 import { NEEDED, PANEL } from '@/lib/rules'
 import { myVotes } from '@/lib/session'
 import { ReviewRow } from '@/components/covenant/ReviewRow'
-import { VoteDots } from '@/components/covenant/VoteDots'
 import { Notice } from '@/components/ui/Notice'
-import { Tag } from '@/components/ui/Tag'
-import { TokenMark } from '@/components/ui/TokenMark'
+import { TokenArt } from '@/components/ui/TokenArt'
 
 /** The verifier's desk: reviews waiting on you, ones you've voted on, and recent decisions. */
 export function Verify() {
@@ -26,102 +24,94 @@ export function Verify() {
   const decided = decidedReviews().slice(0, 8)
 
   return (
-    <div className="wrap pt-10 pb-20 lg:pt-14">
-      <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
+    <div className="wrap pt-8 pb-24 lg:pt-12 lg:pb-16">
+      <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
         <div className="lg:col-span-7">
-          <p className="label">Verify</p>
-          <h1 className="mt-3 text-h1">Judge the proof, not the project.</h1>
-          <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-ink-2">
-            Each review goes to a panel of {PANEL} staked verifiers. {NEEDED} matching verdicts decide it. Verdicts that end up on the losing side cost agreement, and repeated ones cost stake.
+          <h1 className="text-h1">Verify</h1>
+          <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-ink-2">
+            Judge the proof against the measure as written. {PANEL} staked verifiers per review, {NEEDED} matching verdicts decide. Votes on the losing side cost agreement, and repeated ones cost stake.
           </p>
         </div>
-        <dl className="grid grid-cols-3 gap-px overflow-hidden rounded-card border border-line bg-line lg:col-span-5">
+        <dl className="grid grid-cols-3 gap-4 lg:col-span-5">
           {[
             ['Verifying as', me.handle],
             ['Agreement', pct(me.agreement, 0)],
             ['Stake', sol(me.stakeSol, 0)],
           ].map(([k, v]) => (
-            <div key={k} className="bg-surface px-4 py-3.5">
+            <div key={k} className="min-w-0">
               <dt className="label">{k}</dt>
-              <dd className="mt-1 truncate font-mono text-[15px] font-medium">{v}</dd>
+              <dd className="mt-1.5 truncate font-mono text-[17px] font-medium">{v}</dd>
             </div>
           ))}
         </dl>
       </div>
 
-      <div className="mt-12 grid gap-10 lg:grid-cols-12 [&>*]:min-w-0">
+      <div className="mt-12 grid gap-12 lg:grid-cols-12 [&>*]:min-w-0">
         <div className="flex flex-col gap-10 lg:col-span-7">
-          <Group title="Waiting on your verdict" count={waiting.length}>
+          <Group title="Waiting on you" count={waiting.length}>
             {state === 'loading' ? (
-              <Skeleton />
+              <div className="grid gap-2">
+                <div className="skeleton h-16" />
+                <div className="skeleton h-16" />
+              </div>
             ) : state === 'error' ? (
               <Notice kind="error" title="The queue didn’t load." body="Your stake and past verdicts are safe. Try again in a moment." action="Try again" onAction={() => location.reload()} />
             ) : waiting.length ? (
-              <List>
+              <ul className="-mx-3">
                 {waiting.map((r) => (
                   <li key={r.id}>
-                    <ReviewRow item={r} now={now} />
+                    <ReviewRow item={r} now={now} panel={r.panel} />
                   </li>
                 ))}
-              </List>
+              </ul>
             ) : (
-              <Notice title="You’re all caught up." body="New proof lands here as soon as a builder submits it and you’re drawn for the panel." />
+              <Notice className="py-4" title="You’re all caught up." body="New proof shows up here as soon as a builder submits it and you’re drawn for the panel." />
             )}
           </Group>
 
           {voted.length > 0 && (
             <Group title="Voted, still open" count={voted.length}>
-              <List>
+              <ul className="-mx-3">
                 {voted.map((r) => {
                   const v = r.panel.find((x) => x.verifierId === me.id)!
                   return (
-                    <li key={r.id}>
-                      <Link to={`/verify/${r.id}`} className="flex items-center gap-4 px-5 py-4 hover-device:hover:bg-hover">
-                        <TokenMark ticker={r.project.ticker} size={36} />
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-[15px] font-semibold">
-                            {r.project.name} <span className="font-mono text-[12px] font-normal text-ink-3">M{r.milestone.n}</span>
-                          </p>
-                          <p className="truncate text-[13px] text-ink-2">{r.milestone.title}</p>
-                        </div>
-                        <div className="flex flex-col items-end gap-1.5">
-                          <VoteDots panel={r.panel} />
-                          <Tag tone={v.verdict === 'approve' ? 'proven' : 'default'} dot={false} className="h-5 px-1.5 text-[11px]">
-                            You {v.verdict === 'approve' ? 'approved' : 'rejected'}
-                          </Tag>
-                        </div>
-                      </Link>
+                    <li key={r.id} className="relative">
+                      <ReviewRow item={r} now={now} panel={r.panel} />
+                      <span className={cn('pointer-events-none absolute top-3 right-3 font-mono text-[10px] uppercase', v.verdict === 'approve' ? 'text-proven' : 'text-default')}>
+                        You {v.verdict === 'approve' ? 'approved' : 'rejected'}
+                      </span>
                     </li>
                   )
                 })}
-              </List>
+              </ul>
             </Group>
           )}
         </div>
 
         <div className="lg:col-span-5">
           <Group title="Recently decided" count={decided.length}>
-            <List>
+            <ul className="-mx-3">
               {decided.map((r) => {
                 const t = tally(r.milestone.panel)
                 const ok = r.milestone.status === 'proven'
                 return (
                   <li key={`${r.id}-${r.milestone.decidedAt}`}>
-                    <Link to={`/p/${r.project.id}#m${r.milestone.n}`} className="flex items-center gap-3 px-5 py-3.5 hover-device:hover:bg-hover">
-                      <span aria-hidden className={cn('size-2 shrink-0 rounded-[2px]', ok ? 'bg-proven' : 'bg-default')} />
+                    <Link to={`/p/${r.project.id}`} className="flex items-center gap-3 rounded-[12px] p-3 hover-device:hover:bg-hover">
+                      <TokenArt seed={r.project.ticker} size={32} />
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-[14px] font-medium">
                           {r.project.name} · {r.milestone.title}
                         </p>
-                        <p className="font-mono text-[11px] text-ink-3">
-                          {ok ? 'Approved' : 'Rejected'} {ok ? t.approve : t.reject}–{ok ? t.reject : t.approve} · {ago(r.milestone.decidedAt!, now)}
-                        </p>
+                        <p className="font-mono text-[11px] text-ink-3">{ago(r.milestone.decidedAt!, now)}</p>
                       </div>
+                      <span className={cn('font-mono text-[11px] uppercase', ok ? 'text-proven' : 'text-default')}>
+                        {ok ? 'Approved' : 'Rejected'} {ok ? t.approve : t.reject}–{ok ? t.reject : t.approve}
+                      </span>
                     </Link>
                   </li>
                 )
               })}
-            </List>
+            </ul>
           </Group>
         </div>
       </div>
@@ -132,26 +122,10 @@ export function Verify() {
 function Group({ title, count, children }: { title: string; count: number; children: React.ReactNode }) {
   return (
     <section>
-      <h2 className="flex items-baseline gap-2 font-sans text-[15px] font-semibold">
-        {title} <span className="font-mono text-[12px] font-normal text-ink-3">{count}</span>
+      <h2 className="flex items-baseline gap-2 text-[15px] tracking-[-0.03em]">
+        {title} <span className="font-mono text-[12px] font-normal tracking-normal text-ink-3">{count}</span>
       </h2>
       <div className="mt-3">{children}</div>
     </section>
   )
 }
-
-const List = ({ children }: { children: React.ReactNode }) => <ul className="divide-y divide-line overflow-hidden rounded-card border border-line bg-surface">{children}</ul>
-
-const Skeleton = () => (
-  <div className="overflow-hidden rounded-card border border-line bg-surface">
-    {[0, 1].map((i) => (
-      <div key={i} className="flex items-center gap-4 border-b border-line px-5 py-4 last:border-0">
-        <div className="skeleton size-9" />
-        <div className="flex-1">
-          <div className="skeleton h-3.5 w-32" />
-          <div className="skeleton mt-2 h-3 w-48" />
-        </div>
-      </div>
-    ))}
-  </div>
-)

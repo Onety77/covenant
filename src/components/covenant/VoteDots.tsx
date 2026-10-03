@@ -10,7 +10,7 @@ export function VoteDots({ panel = [], size = 10, className }: { panel?: Vote[];
       {panel.map((v) => (
         <span
           key={v.verifierId}
-          className={cn('rounded-[2px]', v.verdict === 'approve' ? 'bg-proven' : v.verdict === 'reject' ? 'bg-default' : 'border border-line-2 bg-surface')}
+          className={cn('rounded-[2px]', v.verdict === 'approve' ? 'bg-proven' : v.verdict === 'reject' ? 'bg-default' : 'bg-line-2')}
           style={{ width: size, height: size }}
         />
       ))}

@@ -1,15 +1,14 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight } from 'lucide-react'
 import { projects } from '@/data/projects'
 import { count, date, left, pct, sol } from '@/lib/format'
+import { useDemoState } from '@/lib/hooks'
 import { useNow } from '@/lib/live'
 import { redeemRate } from '@/lib/redeem'
 import { DEFAULT_WINDOW_DAYS, ESCROW_PCT, SUPPLY } from '@/lib/rules'
-import { MiniRail } from '@/components/covenant/MiniRail'
+import { Button } from '@/components/ui/Button'
 import { Notice } from '@/components/ui/Notice'
-import { Tag } from '@/components/ui/Tag'
-import { TokenMark } from '@/components/ui/TokenMark'
-import { useDemoState } from '@/lib/hooks'
+import { TokenArt } from '@/components/ui/TokenArt'
+import { Meter } from '@/components/covenant/Meter'
 
 /** Covenants that broke: open redemption windows first, then how earlier defaults resolved. */
 export function Defaults() {
@@ -19,114 +18,118 @@ export function Defaults() {
   const past = projects.flatMap((p) => (p.previous ?? []).filter((c) => c.default).map((c) => ({ project: p, covenant: c })))
 
   return (
-    <div className="wrap pt-10 pb-20 lg:pt-14">
-      <div className="max-w-3xl">
-        <p className="label">Defaults</p>
-        <h1 className="mt-3 text-h1">When a promise breaks, holders are paid first.</h1>
-        <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-ink-2">
-          A missed deadline or rejected proof defaults the covenant on its own. For the next {DEFAULT_WINDOW_DAYS} days holders can burn tokens for a share of what the builder put up, and other
-          builders can offer to take the roadmap over.
+    <div className="pb-24 lg:pb-16">
+      <div className="wrap pt-8 lg:pt-12">
+        <h1 className="text-h1">Defaults</h1>
+        <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-ink-2">
+          A missed deadline or rejected proof defaults a covenant on its own. For {DEFAULT_WINDOW_DAYS} days, holders can burn tokens for a share of what the builder put up, and other builders can bid to take
+          the roadmap over.
         </p>
       </div>
 
-      <section aria-labelledby="open-title" className="mt-12">
-        <h2 id="open-title" className="flex items-baseline gap-2 font-sans text-[15px] font-semibold">
-          Redemption open <span className="font-mono text-[12px] font-normal text-ink-3">{open.length}</span>
-        </h2>
-        <div className="mt-3 grid gap-4">
-          {state === 'loading' ? (
-            <div className="skeleton h-56 rounded-card" />
-          ) : open.length ? (
-            open.map((p) => {
-              const c = p.covenant
-              const d = c.default!
-              return (
-                <article key={p.id} className="grid overflow-hidden rounded-card border border-default/40 bg-surface lg:grid-cols-12">
-                  <div className="p-5 sm:p-6 lg:col-span-7">
-                    <div className="flex items-center gap-3">
-                      <TokenMark ticker={p.ticker} size={44} />
+      <section aria-label="Open redemptions" className="mt-10">
+        {state === 'loading' ? (
+          <div className="wrap">
+            <div className="skeleton h-48 rounded-[16px]" />
+          </div>
+        ) : open.length ? (
+          open.map((p) => {
+            const c = p.covenant
+            const d = c.default!
+            return (
+              <article key={p.id} className="bg-default-soft">
+                <div className="wrap grid gap-8 py-8 lg:grid-cols-12 lg:items-center [&>*]:min-w-0">
+                  <div className="lg:col-span-7">
+                    <p className="font-mono text-[11px] text-default uppercase">Redemption open</p>
+                    <div className="mt-4 flex items-center gap-3.5">
+                      <TokenArt seed={p.ticker} size={56} />
                       <div className="min-w-0">
-                        <p className="text-[17px] font-semibold">
-                          {p.name} <span className="font-mono text-[12px] font-normal text-ink-3">${p.ticker}</span>
-                        </p>
-                        <p className="text-[13px] text-ink-2">
+                        <h2 className="truncate text-h2">{p.name}</h2>
+                        <p className="mt-0.5 text-[13px] text-ink-2">
                           {c.builder.handle} missed M{d.milestone}, “{c.milestones[d.milestone - 1].title}” · {date(d.at)}
                         </p>
                       </div>
                     </div>
-                    <MiniRail covenant={c} now={now} className="mt-6" />
-                    <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                    <Meter covenant={c} now={now} className="mt-6 max-w-md" />
+                    <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-4">
                       {[
                         ['Pool', sol(d.poolSol)],
                         ['Redeem 1M', sol(redeemRate(c) * 1e6, 3)],
                         ['Redeemed', pct(d.redeemedPct)],
-                        ['Offers', String(d.takeovers.length)],
+                        ['Takeover bids', String(d.takeovers.length)],
                       ].map(([k, v]) => (
                         <div key={k}>
-                          <p className="label">{k}</p>
-                          <p className="mt-0.5 font-mono text-[15px] font-medium">{v}</p>
+                          <dt className="label">{k}</dt>
+                          <dd className="mt-1 font-mono text-[16px] font-medium">{v}</dd>
                         </div>
                       ))}
+                    </dl>
+                  </div>
+                  <div className="lg:col-span-5">
+                    <p className="label">Window closes in</p>
+                    <p className="mt-1 font-mono text-[40px] leading-none font-medium tracking-[-0.04em] text-default">{left(d.redemptionClosesAt, now)}</p>
+                    <p className="mt-3 text-[13px] leading-relaxed text-ink-2">
+                      {count(Math.round((SUPPLY * (1 - ESCROW_PCT / 100) * (1 - d.redeemedPct)) / 1e6))}M ${p.ticker} not yet redeemed. Every token pays the same rate, whenever it’s burned.
+                    </p>
+                    <div className="mt-5 flex gap-2">
+                      <Button variant="danger" to={`/p/${p.id}#redeem`} className="max-sm:flex-1">
+                        Redeem
+                      </Button>
+                      <Button to={`/p/${p.id}`} className="max-sm:flex-1">
+                        Takeover bids
+                      </Button>
                     </div>
                   </div>
-                  <div className="flex flex-col justify-between gap-6 border-t border-default/30 bg-default-soft p-5 sm:p-6 lg:col-span-5 lg:border-t-0 lg:border-l">
-                    <div>
-                      <p className="label text-default">Window closes in</p>
-                      <p className="mt-1 font-display text-[44px] leading-none">{left(d.redemptionClosesAt, now)}</p>
-                      <p className="mt-3 text-[13px] leading-relaxed text-ink-2">
-                        {count(Math.round(SUPPLY * (1 - ESCROW_PCT / 100) * (1 - d.redeemedPct) / 1e6))}M ${p.ticker} still unredeemed. Burning pays the same rate whenever you do it.
-                      </p>
-                    </div>
-                    <Link to={`/p/${p.id}#redeem`} className="inline-flex h-11 items-center justify-center gap-2 rounded-control bg-default px-4 text-[14px] font-semibold text-on-default hover-device:hover:brightness-110">
-                      Redeem or see offers <ArrowRight className="size-4" />
-                    </Link>
-                  </div>
-                </article>
-              )
-            })
-          ) : (
-            <Notice title="No covenant is in default." body="Every active builder is inside their deadlines. If one misses, the redemption window opens here automatically." />
-          )}
-        </div>
+                </div>
+              </article>
+            )
+          })
+        ) : (
+          <div className="wrap">
+            <Notice title="No covenant is in default." body="Every live builder is inside their deadlines. If one misses, redemption opens here on its own." />
+          </div>
+        )}
       </section>
 
-      <section aria-labelledby="how-title" className="mt-16 grid gap-px overflow-hidden rounded-card border border-line bg-line md:grid-cols-3">
-        <h2 id="how-title" className="sr-only">
+      <section aria-labelledby="how-title" className="wrap mt-14">
+        <h2 id="how-title" className="text-h2">
           How a default resolves
         </h2>
-        {[
-          ['01', 'The pool', 'What’s left of the 10 SOL bond, plus every pledged fee not yet released. Locked liquidity is never part of it, and stays in the pool for traders.'],
-          ['02', 'Redemption', `Burn any amount of the token for a pro-rata share of the pool. The rate is the pool over all tokens outside escrow, so it doesn’t change as others redeem.`],
-          ['03', 'Takeover', 'Builders post a new bond and new deadlines for what’s still owed. One takes the roadmap and inherits the unreleased escrow; the others’ bonds go back.'],
-        ].map(([n, t, b]) => (
-          <div key={n} className="bg-surface p-6">
-            <p className="font-mono text-[11px] text-ink-3">{n}</p>
-            <p className="mt-3 font-display text-[28px] leading-tight">{t}</p>
-            <p className="mt-2 text-[14px] leading-relaxed text-ink-2">{b}</p>
-          </div>
-        ))}
+        <ol className="mt-7 grid gap-8 md:grid-cols-3">
+          {[
+            ['The pool', 'What’s left of the 10 SOL bond, plus every pledged fee not yet released. Locked liquidity is never part of it; it stays in the pool for traders.'],
+            ['Redemption', 'Burn any amount for a pro-rata share of the pool. The rate is the pool over every token outside escrow, so it doesn’t change as others redeem.'],
+            ['Takeover', 'Builders post a new bond and new deadlines for what’s still owed. One takes over and inherits the unreleased escrow; the other bonds go back.'],
+          ].map(([t, b], i) => (
+            <li key={t}>
+              <span className="grid size-6 place-items-center rounded-[6px] bg-raised font-mono text-[11px] text-ink-2">{i + 1}</span>
+              <p className="mt-4 font-display text-[17px] font-semibold tracking-[-0.03em]">{t}</p>
+              <p className="mt-2 text-[14px] leading-relaxed text-ink-2">{b}</p>
+            </li>
+          ))}
+        </ol>
       </section>
 
       {past.length > 0 && (
-        <section aria-labelledby="past-title" className="mt-16">
-          <h2 id="past-title" className="flex items-baseline gap-2 font-sans text-[15px] font-semibold">
-            Resolved <span className="font-mono text-[12px] font-normal text-ink-3">{past.length}</span>
+        <section aria-labelledby="past-title" className="wrap mt-14">
+          <h2 id="past-title" className="text-h2">
+            Resolved
           </h2>
-          <ul className="mt-3 divide-y divide-line overflow-hidden rounded-card border border-line bg-surface">
+          <ul className="-mx-3 mt-5">
             {past.map(({ project: p, covenant: c }) => (
               <li key={p.id + c.startedAt}>
-                <Link to={`/p/${p.id}#history`} className="grid items-center gap-4 px-5 py-4 hover-device:hover:bg-hover md:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)_auto]">
+                <Link to={`/p/${p.id}`} className="grid items-center gap-x-6 gap-y-3 rounded-[12px] p-3 hover-device:hover:bg-hover md:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)_auto]">
                   <div className="flex min-w-0 items-center gap-3">
-                    <TokenMark ticker={p.ticker} size={36} />
+                    <TokenArt seed={p.ticker} size={40} />
                     <div className="min-w-0">
                       <p className="truncate text-[15px] font-semibold">{p.name}</p>
-                      <p className="truncate text-[13px] text-ink-2">
+                      <p className="truncate text-[13px] text-ink-3">
                         {c.builder.handle} → {c.default!.successor?.handle} · {pct(c.default!.redeemedPct, 0)} redeemed
                       </p>
                     </div>
                   </div>
-                  <MiniRail covenant={c} now={now} />
-                  <Tag tone="neutral">Handed over</Tag>
+                  <Meter covenant={c} now={now} />
+                  <span className="font-mono text-[11px] text-ink-3 uppercase">Handed over</span>
                 </Link>
               </li>
             ))}
