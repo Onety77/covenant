@@ -11,6 +11,7 @@ import { TokenArt } from '@/components/ui/TokenArt'
 import { Ticking } from '@/components/motion/Ticking'
 import { Milestones } from '@/components/covenant/Milestones'
 import { VerdictForm } from '@/components/verify/VerdictForm'
+import { useTitle } from '@/lib/useTitle'
 
 const wait = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms))
 
@@ -20,6 +21,7 @@ export function Review() {
   const now = useNow()
   const item = findReview(id)
   const votes = myVotes.use()
+  useTitle(item ? `${item.milestone.title} · ${item.project.name}` : 'Review')
 
   if (!item || item.milestone.status !== 'review') {
     return (
@@ -73,6 +75,7 @@ export function Review() {
               The milestone is due {date(due(p.covenant, m))}, before this review closes. Proof was sent in time, so it counts. Judge it as if the deadline hadn’t passed.
             </p>
           )}
+          <h2 className="sr-only">The milestone and its proof</h2>
           <Milestones covenant={covenant} now={now} only={[m.n]} />
         </div>
         <aside className="lg:col-span-4">

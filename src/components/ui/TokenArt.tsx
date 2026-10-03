@@ -39,6 +39,14 @@ const motifs: Motif[] = [
       <rect x="52" y="52" width="26" height="26" rx="4" />
     </g>
   ),
+  (fg) => <path d="M50 16 L82 50 L50 84 L18 50 Z" fill="none" stroke={fg} strokeWidth="8" strokeLinejoin="round" />,
+  (fg) => (
+    <g fill={fg}>
+      {[0, 1, 2].map((i) => (
+        <rect key={i} x={24 + i * 20} y={70 - i * 18} width="12" height={10 + i * 18} rx="3" />
+      ))}
+    </g>
+  ),
 ]
 
 interface Props {

@@ -28,7 +28,7 @@ export const emptyDraft: Draft = {
 }
 
 /** Deadlines must leave at least two weeks per milestone and end by day 90. */
-export const MIN_GAP = 14
+const MIN_GAP = 14
 export function dayErrors(ms: DraftMilestone[]) {
   return ms.map((m, i) => {
     const prev = i ? ms[i - 1].dueDay : 0

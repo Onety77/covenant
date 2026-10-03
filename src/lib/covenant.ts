@@ -14,15 +14,6 @@ export const statusLabel: Record<MilestoneStatus, string> = {
 /** proven and default are verdicts (green, red); accent marks what awaits one; the rest is neutral */
 export type Tone = 'neutral' | 'accent' | 'proven' | 'default'
 
-export const statusTone: Record<MilestoneStatus, Tone> = {
-  locked: 'neutral',
-  open: 'neutral',
-  review: 'accent',
-  proven: 'proven',
-  rejected: 'default',
-  missed: 'default',
-}
-
 export const covenantLabel: Record<Covenant['state'], string> = {
   active: 'Live',
   fulfilled: 'Fulfilled',
@@ -37,7 +28,7 @@ export const covenantTone: Record<Covenant['state'], Tone> = {
   succeeded: 'neutral',
 }
 
-export const releasedPct = (c: Covenant) => c.milestones.filter((m) => m.status === 'proven').reduce((s, m) => s + m.releasePct, 0)
+const releasedPct = (c: Covenant) => c.milestones.filter((m) => m.status === 'proven').reduce((s, m) => s + m.releasePct, 0)
 export const provenCount = (c: Covenant) => c.milestones.filter((m) => m.status === 'proven').length
 
 /** The milestone that matters now: in review, else open, else the next locked one. */

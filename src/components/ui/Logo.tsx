@@ -1,7 +1,7 @@
 import { cn } from '@/lib/cn'
 
 /** The mark is the covenant itself: a 90-day line with three gates, the last one taller. */
-export function LogoMark({ className }: { className?: string }) {
+function LogoMark({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 28 28" className={cn('size-7', className)} aria-hidden>
       <rect width="28" height="28" rx="7" className="fill-accent" />

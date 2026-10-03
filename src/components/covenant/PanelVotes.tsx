@@ -19,7 +19,7 @@ export function PanelVotes({ panel, now, className }: { panel: Vote[]; now: numb
                 <span className={cn('text-[12px]', v.verdict ? 'text-ink-2' : 'text-ink-3')}>
                   {v.verdict === 'approve' ? 'Approved' : v.verdict === 'reject' ? 'Rejected' : 'Reviewing'}
                 </span>
-                {v.at && <span className="ml-auto font-mono text-[11px] text-ink-4">{ago(v.at, now)}</span>}
+                {v.at && <span className="ml-auto font-mono text-[11px] text-ink-3">{ago(v.at, now)}</span>}
               </p>
               {v.note && <p className="mt-1 text-[13px] leading-relaxed text-ink-2">{v.note}</p>}
             </div>

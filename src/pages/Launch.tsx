@@ -14,6 +14,7 @@ import { Meter } from '@/components/covenant/Meter'
 import { TermRail } from '@/components/covenant/TermRail'
 import { MilestoneEditor } from '@/components/launch/MilestoneEditor'
 import { useWallet } from '@/components/layout/wallet'
+import { useTitle } from '@/lib/useTitle'
 
 const steps = ['Token', 'Milestones', 'Stakes', 'Sign'] as const
 const wait = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms))
@@ -35,6 +36,7 @@ const example: Draft = {
  * phones) is the covenant exactly as holders will see it.
  */
 export function Launch() {
+  useTitle('Launch a token')
   const now = useNow()
   const { address, connect } = useWallet()
   const [step, setStep] = useState(0)

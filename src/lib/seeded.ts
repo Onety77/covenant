@@ -18,17 +18,3 @@ export function seeded(seed: string) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296
   }
 }
-/** A price path that ends at `last` and moved `change` (0.12 = +12%) over the window. */
-export function pricePath(seed: string, last: number, change: number, points = 72) {
-  const r = seeded(seed)
-  const first = last / (1 + change)
-  const out: number[] = []
-  let noise = 0
-  for (let i = 0; i < points; i++) {
-    const t = i / (points - 1)
-    noise = noise * 0.82 + (r() - 0.5) * 0.06
-    out.push(first + (last - first) * t + last * noise * Math.sin(t * Math.PI))
-  }
-  out[points - 1] = last
-  return out
-}

@@ -69,7 +69,7 @@ export function Candles({ seed, base, change, live = base, className }: Props) {
       {ticks
         .filter((t) => Math.abs(y(t) - y(live)) > 16)
         .map((t) => (
-          <span key={t} className="absolute right-0 -translate-y-1/2 font-mono text-[10px] text-ink-4" style={{ top: top(t) }}>
+          <span key={t} className="absolute right-0 -translate-y-1/2 font-mono text-[10px] text-ink-3" style={{ top: top(t) }}>
             {price(t)}
           </span>
         ))}

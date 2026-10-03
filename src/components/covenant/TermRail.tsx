@@ -75,7 +75,7 @@ export function TermRail({ covenant: c, now, stacked = false, draw = false, dela
                 </div>
                 <p className="mt-2.5 flex min-w-0 flex-wrap items-baseline gap-x-2 pr-2">
                   <span className={cn('font-mono text-[11px] font-medium uppercase', verdictText(m))}>{statusLabel[m.status]}</span>
-                  <span className="font-mono text-[11px] text-ink-4 max-sm:hidden">
+                  <span className="font-mono text-[11px] text-ink-3 max-sm:hidden">
                     D{m.dueDay} · {date(dueAt(c.startedAt, m.dueDay))}
                   </span>
                 </p>

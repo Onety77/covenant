@@ -19,6 +19,7 @@ import { Tabs } from '@/components/ui/Tabs'
 import { LiveCovenant } from '@/components/board/LiveCovenant'
 import { Ticker } from '@/components/board/Ticker'
 import { TokenItem, TokenItemSkeleton } from '@/components/board/TokenItem'
+import { useTitle } from '@/lib/useTitle'
 
 type Filter = Standing | 'all'
 type Sort = 'due' | 'mcap' | 'new'
@@ -27,7 +28,7 @@ const filters: { id: Filter; label: string }[] = [
   { id: 'all', label: 'All' },
   { id: 'curve', label: 'Bonding' },
   { id: 'review', label: 'In review' },
-  { id: 'term', label: 'Live' },
+  { id: 'term', label: 'Building' },
   { id: 'fulfilled', label: 'Fulfilled' },
   { id: 'defaulted', label: 'Defaulted' },
 ]
@@ -41,6 +42,7 @@ const steps = [
 
 /** The board: what's at stake right now, the launch everyone is watching, then every token. */
 export function Home() {
+  useTitle()
   const now = useNow()
   const state = useDemoState()
   const [filter, setFilter] = useState<Filter>('all')
@@ -87,10 +89,10 @@ export function Home() {
               Every token on Covenant ships with a bonded roadmap. Builders who deliver get paid. Builders who don’t pay their holders.
             </p>
             <div className="mt-8 flex gap-2">
-              <Button variant="primary" size="lg" to="/launch" className="max-sm:flex-1">
+              <Button variant="primary" size="lg" to="/launch" className="max-sm:flex-1 max-sm:px-3">
                 Launch a token
               </Button>
-              <Button size="lg" to="#board" className="max-sm:flex-1">
+              <Button size="lg" to="#board" className="max-sm:flex-1 max-sm:px-3">
                 Explore tokens
               </Button>
             </div>

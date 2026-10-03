@@ -10,7 +10,7 @@ export function HoldersList({ project }: { project: Project }) {
     <ol className="grid gap-2.5">
       {list.map((h, i) => (
         <li key={h.wallet} className="grid grid-cols-[20px_1fr_64px] items-center gap-3 text-[13px]">
-          <span className="font-mono text-[11px] text-ink-4">{i + 1}</span>
+          <span className="font-mono text-[11px] text-ink-3">{i + 1}</span>
           <div className="min-w-0">
             <p className="flex items-baseline gap-2">
               <span className={cn('truncate', h.label ? 'font-semibold' : 'font-mono text-ink-2')}>{h.wallet}</span>

@@ -4,6 +4,7 @@ import { useNow } from '@/lib/live'
 import { BOND_SOL, CURVE_TARGET_SOL, DEFAULT_WINDOW_DAYS, ESCROW_PCT, NEEDED, PANEL, REVIEW_DAYS, TERM_DAYS } from '@/lib/rules'
 import { Button } from '@/components/ui/Button'
 import { TermRail } from '@/components/covenant/TermRail'
+import { useTitle } from '@/lib/useTitle'
 
 const rules: { id: string; title: string; body: ReactNode }[] = [
   {
@@ -79,6 +80,7 @@ const rules: { id: string; title: string; body: ReactNode }[] = [
 
 /** The protocol's rules in the order a launch meets them. */
 export function Rules() {
+  useTitle('Rules')
   const now = useNow()
   const kiln = getProject('kiln')!
   return (
@@ -97,7 +99,7 @@ export function Rules() {
             {rules.map((r, i) => (
               <li key={r.id}>
                 <a href={`#${r.id}`} className="flex gap-3 rounded-[8px] px-2 py-1.5 text-[14px] text-ink-2 hover-device:hover:bg-hover hover-device:hover:text-ink">
-                  <span className="font-mono text-[12px] text-ink-4">{i + 1}</span>
+                  <span className="font-mono text-[12px] text-ink-3">{i + 1}</span>
                   {r.title}
                 </a>
               </li>
@@ -108,7 +110,7 @@ export function Rules() {
           {rules.map((r, i) => (
             <section key={r.id} id={r.id} aria-labelledby={`${r.id}-t`} className="scroll-mt-24 pb-10">
               <h2 id={`${r.id}-t`} className="flex items-baseline gap-3 text-h2">
-                <span className="font-mono text-[14px] font-normal text-ink-4">{i + 1}</span>
+                <span className="font-mono text-[14px] font-normal text-ink-3">{i + 1}</span>
                 {r.title}
               </h2>
               <div className="mt-3 grid max-w-2xl gap-3 text-[15px] leading-relaxed text-ink-2">{r.body}</div>

@@ -2,7 +2,6 @@
 export const TERM_DAYS = 90
 export const BOND_SOL = 10
 export const ESCROW_PCT = 15
-export const MILESTONES = 3
 /** each review is decided by a panel of five verifiers; three matching verdicts decide it */
 export const PANEL = 5
 export const NEEDED = 3

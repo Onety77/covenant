@@ -27,7 +27,7 @@ export function SearchBox({ className }: { className?: string }) {
 
   return (
     <div ref={wrap} className={cn('relative', className)} onBlur={(e) => !wrap.current?.contains(e.relatedTarget as Node) && s.close()}>
-      <div className={cn('flex h-10 items-center gap-2 rounded-control bg-raised px-3 ring-1 transition-shadow', s.open ? 'ring-line-2' : 'ring-transparent')}>
+      <div className={cn('flex h-10 items-center gap-2 rounded-control bg-raised px-3 ring-1 transition-shadow focus-within:ring-accent', s.open ? 'ring-line-2' : 'ring-transparent')}>
         <Search className="size-4 shrink-0 text-ink-3" />
         <input
           ref={input}
@@ -45,7 +45,7 @@ export function SearchBox({ className }: { className?: string }) {
           onChange={(e) => s.setQuery(e.target.value)}
           onFocus={() => s.setOpen(true)}
           onKeyDown={s.onKeyDown}
-          className="min-w-0 flex-1 bg-transparent text-[14px] outline-none"
+          className="min-w-0 flex-1 bg-transparent text-[14px] outline-none focus-visible:outline-none"
         />
         {s.query ? (
           <button type="button" aria-label="Clear search" onClick={() => (s.setQuery(''), input.current?.focus())} className="grid size-5 place-items-center rounded-full text-ink-3 hover-device:hover:text-ink">
@@ -65,7 +65,7 @@ export function SearchBox({ className }: { className?: string }) {
             className="absolute top-full right-0 z-50 mt-2 w-[min(400px,calc(100vw-32px))] origin-top overflow-hidden rounded-[14px] bg-surface shadow-[0_0_0_1px_var(--line-2),0_24px_60px_-20px_rgb(0_0_0/0.9)]"
           >
             <SearchResults id={`${id}-list`} query={s.query} hits={s.hits} trending={s.popular} active={s.active} onHover={s.setActive} onPick={s.pick} tooShort={s.tooShort} />
-            <p className="flex gap-3 border-t border-line px-3 py-2 font-mono text-[11px] text-ink-4">
+            <p className="flex gap-3 border-t border-line px-3 py-2 font-mono text-[11px] text-ink-3">
               <span>↑↓ move</span>
               <span>↵ open</span>
               <span>esc close</span>

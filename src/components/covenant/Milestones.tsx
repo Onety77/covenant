@@ -82,7 +82,7 @@ function Item({ c, m, now, last, href }: { c: Covenant; m: Milestone; now: numbe
             ['Releases', `${m.releasePct}% supply`],
           ].map(([a, b]) => (
             <div key={a} className="flex gap-1.5">
-              <dt className="text-ink-4 uppercase">{a}</dt>
+              <dt className="text-ink-3 uppercase">{a}</dt>
               <dd className="text-ink">{b}</dd>
             </div>
           ))}
@@ -165,9 +165,15 @@ function ProofBlock({ proof, now, late }: { proof: Proof; now: number; late?: bo
       <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
         {proof.links.map((l) => (
           <li key={l.label}>
-            <a href={l.href} className="inline-flex items-center gap-1 text-[13px] font-medium text-ink-2 hover-device:hover:text-ink">
-              {l.label} <ArrowUpRight className="size-3" />
-            </a>
+            {l.href && l.href !== '#' ? (
+              <a href={l.href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[13px] font-medium text-ink-2 hover-device:hover:text-ink">
+                {l.label} <ArrowUpRight className="size-3" />
+              </a>
+            ) : (
+              <span className="inline-flex items-center gap-1 text-[13px] font-medium text-ink-2" title="Sample evidence">
+                {l.label} <ArrowUpRight className="size-3 opacity-50" />
+              </span>
+            )}
           </li>
         ))}
       </ul>

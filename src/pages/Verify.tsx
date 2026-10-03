@@ -11,9 +11,11 @@ import { myVotes } from '@/lib/session'
 import { ReviewRow } from '@/components/covenant/ReviewRow'
 import { Notice } from '@/components/ui/Notice'
 import { TokenArt } from '@/components/ui/TokenArt'
+import { useTitle } from '@/lib/useTitle'
 
 /** The verifier's desk: reviews waiting on you, ones you've voted on, and recent decisions. */
 export function Verify() {
+  useTitle('Verify')
   const now = useNow()
   const state = useDemoState()
   const votes = myVotes.use()

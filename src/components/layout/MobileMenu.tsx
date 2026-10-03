@@ -53,6 +53,9 @@ function Panel() {
   return (
     <m.div
       id="mobile-menu"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menu"
       className="fixed inset-x-0 top-[calc(56px+env(safe-area-inset-top))] bottom-0 z-40 flex flex-col bg-bg lg:hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}

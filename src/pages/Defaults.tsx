@@ -10,9 +10,11 @@ import { Notice } from '@/components/ui/Notice'
 import { TokenArt } from '@/components/ui/TokenArt'
 import { Meter } from '@/components/covenant/Meter'
 import { Ticking } from '@/components/motion/Ticking'
+import { useTitle } from '@/lib/useTitle'
 
 /** Covenants that broke: open redemption windows first, then how earlier defaults resolved. */
 export function Defaults() {
+  useTitle('Defaults')
   const now = useNow()
   const state = useDemoState()
   const open = state === 'empty' ? [] : projects.filter((p) => p.covenant.state === 'defaulted')

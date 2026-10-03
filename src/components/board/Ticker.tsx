@@ -36,7 +36,7 @@ export function Ticker({ items, now }: { items: Activity[]; now: number }) {
             {p && <TokenArt seed={p.ticker} size={24} />}
             <span className="font-semibold">{p?.ticker}</span>
             <span className="text-ink-3">{verb[a.kind]}</span>
-            <span className="font-mono text-[11px] text-ink-4">{ago(a.at, now).replace(' ago', '')}</span>
+            <span className="font-mono text-[11px] text-ink-3">{ago(a.at, now).replace(' ago', '')}</span>
           </Link>
         </li>
       )

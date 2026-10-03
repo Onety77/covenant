@@ -14,7 +14,7 @@ export function Header() {
   const { address, connect } = useWallet()
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-[color-mix(in_srgb,var(--bg)_90%,transparent)] backdrop-blur-md">
-      <div className="wrap flex h-14 items-center gap-6 lg:h-16">
+      <div className="wrap flex h-14 items-center gap-3 sm:gap-6 lg:h-16">
         <Link to="/" aria-label="Covenant home" className="rounded-md">
           <Logo />
         </Link>
@@ -39,9 +39,9 @@ export function Header() {
           </ul>
         </nav>
         <SearchBox className="ml-auto hidden w-64 md:block lg:w-72" />
-        <div className="flex items-center gap-2 max-md:ml-auto">
+        <div className="flex items-center gap-1.5 max-md:ml-auto sm:gap-2">
           <SearchSheet className="grid size-9 place-items-center rounded-control bg-raised text-ink-2 md:hidden" />
-          <Button variant="secondary" onClick={connect} className="max-sm:h-9 max-sm:px-3 max-sm:text-[13px]">
+          <Button variant="secondary" onClick={connect} className="max-sm:h-9 max-sm:px-2.5 max-sm:text-[13px]">
             {address ? <span className="font-mono text-[13px]">{address}</span> : 'Connect'}
           </Button>
           <Button variant="primary" to="/launch" className="max-lg:hidden">

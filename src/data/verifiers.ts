@@ -1,7 +1,7 @@
 import type { Verifier } from '@/types'
 
 /** Fictional verifier set. Every name and wallet here is made up. */
-export const verifiers: Verifier[] = [
+const verifiers: Verifier[] = [
   { id: 'v1', handle: 'halcyon', wallet: '7Hq2…mV4e', reviews: 214, agreement: 0.97, stakeSol: 120 },
   { id: 'v2', handle: 'saltmarsh', wallet: 'Cx9a…22Lp', reviews: 188, agreement: 0.95, stakeSol: 90 },
   { id: 'v3', handle: 'norte', wallet: '4kPe…Q1zz', reviews: 162, agreement: 0.96, stakeSol: 100 },

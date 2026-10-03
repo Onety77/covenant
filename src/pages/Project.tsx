@@ -30,6 +30,7 @@ import { CurveProgress } from '@/components/project/CurveProgress'
 import { RedeemPanel } from '@/components/project/RedeemPanel'
 import { Takeovers } from '@/components/project/Takeovers'
 import { TradePanel } from '@/components/project/TradePanel'
+import { useTitle } from '@/lib/useTitle'
 
 const wait = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms))
 
@@ -44,6 +45,7 @@ export function ProjectPage() {
   const { id = '' } = useParams()
   const now = useNow()
   const p = getProject(id)
+  useTitle(p ? `${p.name} ($${p.ticker})` : 'Token not found')
   const live = useLive(id) ?? { price: 0, change24h: 0, mcap: 0, tick: 0 }
   // the action panel renders once: beside the content on desktop, inline under the covenant on phones
   const wide = useMedia('(min-width: 1024px)')
@@ -171,7 +173,9 @@ export function ProjectPage() {
                 <h2 id="covenant-title" className="text-h2">
                   Covenant
                 </h2>
-                <span className="font-mono text-[12px] text-ink-3">{c.builder.wallet}</span>
+                <span className="text-[12px] text-ink-3">
+                  Builder wallet <span className="font-mono text-ink-2">{c.builder.wallet}</span>
+                </span>
               </div>
               <TermRail covenant={c} now={now} className="mt-6" />
             </section>
@@ -227,7 +231,7 @@ export function ProjectPage() {
         </div>
       </div>
 
-      {/* phones: the action stays pinned above the tab bar */}
+      {/* phones: the action stays pinned to the bottom of the screen */}
       <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-[color-mix(in_srgb,var(--bg)_94%,transparent)] backdrop-blur-md lg:hidden">
         <div className="wrap flex gap-2 pt-2.5 pb-[max(10px,env(safe-area-inset-bottom))]">
           {defaulted ? (

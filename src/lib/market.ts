@@ -1,6 +1,6 @@
 import type { Project } from '@/types'
 import { seeded } from './seeded'
-import { SOL_USD, SUPPLY } from './rules'
+import { SOL_USD } from './rules'
 
 export interface Candle {
   o: number
@@ -80,4 +80,3 @@ export function holders(p: Project): Holder[] {
 }
 
 export const tokensFmt = (n: number) => (n >= 1e6 ? `${(n / 1e6).toFixed(n >= 1e7 ? 0 : 1)}M` : n >= 1e3 ? `${Math.round(n / 1e3)}K` : String(Math.round(n)))
-export const supply = SUPPLY

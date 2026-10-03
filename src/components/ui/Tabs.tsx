@@ -29,7 +29,7 @@ export function Tabs<T extends string>({ items, value, onChange, label, classNam
         >
           {value === it.id && <m.span layoutId={`tab-${group}`} className="absolute inset-0 rounded-[9px] bg-ink" transition={SPRING_UI} />}
           <span className="relative">{it.label}</span>
-          {it.count !== undefined && <span className={cn('relative font-mono text-[11px] transition-colors duration-200', value === it.id ? 'text-bg/60' : 'text-ink-4')}>{it.count}</span>}
+          {it.count !== undefined && <span className={cn('relative font-mono text-[11px] transition-colors duration-200', value === it.id ? 'text-bg/60' : 'text-ink-3')}>{it.count}</span>}
         </button>
       ))}
     </div>

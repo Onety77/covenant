@@ -4,4 +4,3 @@ export const nav = [
   { to: '/defaults', label: 'Defaults', hint: 'Redemptions and takeovers' },
   { to: '/rules', label: 'Rules', hint: 'How a covenant works' },
 ]
-export const docsUrl = '#'
