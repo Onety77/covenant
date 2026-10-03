@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/Button'
 import { Notice } from '@/components/ui/Notice'
 import { TokenArt } from '@/components/ui/TokenArt'
 import { Meter } from '@/components/covenant/Meter'
+import { Ticking } from '@/components/motion/Ticking'
 
 /** Covenants that broke: open redemption windows first, then how earlier defaults resolved. */
 export function Defaults() {
@@ -67,7 +68,7 @@ export function Defaults() {
                   </div>
                   <div className="lg:col-span-5">
                     <p className="label">Window closes in</p>
-                    <p className="mt-1 font-mono text-[40px] leading-none font-medium tracking-[-0.04em]">{left(d.redemptionClosesAt, now)}</p>
+                    <Ticking className="mt-1 font-mono text-[40px] leading-none font-medium tracking-[-0.04em]" value={-now} text={left(d.redemptionClosesAt, now)} flash={false} />
                     <p className="mt-3 text-[13px] leading-relaxed text-ink-2">
                       {count(Math.round((SUPPLY * (1 - ESCROW_PCT / 100) * (1 - d.redeemedPct)) / 1e6))}M ${p.ticker} not yet redeemed. Every token pays the same rate, whenever it’s burned.
                     </p>

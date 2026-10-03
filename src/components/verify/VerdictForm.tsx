@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { Check, X } from 'lucide-react'
 import type { Verdict } from '@/types'
+import { m } from 'motion/react'
 import { cn } from '@/lib/cn'
+import { EASE_OUT } from '@/lib/motion'
 import { Button } from '@/components/ui/Button'
 import { useWallet } from '@/components/layout/wallet'
 
@@ -23,15 +25,22 @@ export function VerdictForm({ cast, closed, onSubmit }: Props) {
 
   if (cast) {
     return (
-      <div className="rounded-[16px] bg-surface p-4" role="status">
+      <m.div className="rounded-[16px] bg-surface p-4" role="status" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: EASE_OUT }}>
         <p className="label">Your verdict</p>
-        <p className={cn('mt-2 flex items-center gap-2 font-display text-[20px] font-semibold tracking-[-0.03em]', cast.verdict === 'approve' ? 'text-proven' : 'text-default')}>
-          {cast.verdict === 'approve' ? <Check className="size-5" strokeWidth={3} /> : <X className="size-5" strokeWidth={3} />}
+        <p className="mt-2 flex items-center gap-2.5 font-display text-[20px] font-semibold tracking-[-0.03em]">
+          <m.span
+            className={cn('grid size-6 place-items-center rounded-[6px]', cast.verdict === 'approve' ? 'bg-proven text-[#04140b]' : 'bg-default text-on-default')}
+            initial={{ scale: 0.3, rotate: -20 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: 'spring', stiffness: 500, damping: 22, delay: 0.1 }}
+          >
+            {cast.verdict === 'approve' ? <Check className="size-3.5" strokeWidth={3} /> : <X className="size-3.5" strokeWidth={3} />}
+          </m.span>
           {cast.verdict === 'approve' ? 'Approved' : 'Rejected'}
         </p>
         <p className="mt-2 text-[14px] leading-relaxed text-ink-2">{cast.note}</p>
         <p className="mt-4 text-[12px] text-ink-3">Recorded onchain. It counts once the panel reaches three matching verdicts.</p>
-      </div>
+      </m.div>
     )
   }
 
@@ -61,7 +70,7 @@ export function VerdictForm({ cast, closed, onSubmit }: Props) {
               key={v}
               className={cn(
                 'flex h-12 cursor-pointer items-center justify-center gap-2 rounded-[11px] text-[15px] font-semibold transition-colors has-focus-visible:outline-2 has-focus-visible:outline-accent',
-                verdict === v ? (v === 'approve' ? 'bg-proven text-[#04140b]' : 'bg-default text-on-default') : 'bg-raised text-ink-2 hover-device:hover:text-ink',
+                verdict === v ? 'bg-ink text-bg' : 'bg-raised text-ink-2 hover-device:hover:text-ink',
               )}
             >
               <input type="radio" name="verdict" value={v} checked={verdict === v} onChange={() => setVerdict(v)} className="sr-only" disabled={closed} />

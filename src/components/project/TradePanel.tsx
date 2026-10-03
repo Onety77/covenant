@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import type { Project } from '@/types'
+import { m } from 'motion/react'
 import { cn } from '@/lib/cn'
+import { SPRING_UI } from '@/lib/motion'
+import { Done } from '@/components/motion/Done'
 import { count, sol } from '@/lib/format'
 import { FEE_PCT, SOL_USD } from '@/lib/rules'
 import { Button } from '@/components/ui/Button'
@@ -46,12 +49,10 @@ export function TradePanel({ project: p, side: initial = 'buy', onTrade }: { pro
               setSide(s)
               setState('idle')
             }}
-            className={cn(
-              'h-9 rounded-[8px] text-[14px] font-semibold capitalize transition-colors',
-              side === s ? 'bg-raised text-ink' : 'text-ink-3 hover-device:hover:text-ink',
-            )}
+            className={cn('relative h-9 rounded-[8px] text-[14px] font-semibold capitalize transition-colors', side === s ? 'text-ink' : 'text-ink-3 hover-device:hover:text-ink')}
           >
-            {s}
+            {side === s && <m.span layoutId={`side-${p.id}`} className="absolute inset-0 rounded-[8px] bg-raised" transition={SPRING_UI} />}
+            <span className="relative">{s}</span>
           </button>
         ))}
       </div>
@@ -92,9 +93,9 @@ export function TradePanel({ project: p, side: initial = 'buy', onTrade }: { pro
       <Button type="submit" variant={!address ? 'primary' : side === 'buy' ? 'buy' : 'sell'} size="lg" className="mt-4 w-full disabled:opacity-100" disabled={state === 'pending' || (Boolean(address) && !n)}>
         {!address ? 'Connect wallet' : state === 'pending' ? 'Confirm in wallet…' : `${side === 'buy' ? 'Buy' : 'Sell'} $${p.ticker}`}
       </Button>
-      <p className={cn('mt-3 text-[12px] leading-relaxed', state === 'done' ? 'text-proven' : state === 'error' ? 'text-default' : 'text-ink-3')} aria-live="polite">
+      <p className={cn('mt-3 text-[12px] leading-relaxed', state === 'error' ? 'text-default' : 'text-ink-3')} aria-live="polite">
         {state === 'done'
-          ? 'Trade confirmed.'
+          ? <Done>Trade confirmed.</Done>
           : state === 'error'
             ? 'The trade didn’t go through. Nothing was spent. Try again.'
             : `On the ${venue}. ${FEE_PCT}% fee; the builder’s share goes into the covenant.`}

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import { m } from 'motion/react'
+import { EASE_OUT } from '@/lib/motion'
 import { BottomNav } from './BottomNav'
 import { Footer } from './Footer'
 import { Header } from './Header'
@@ -24,7 +26,10 @@ export function Shell() {
       </a>
       <Header />
       <main id="main" className="flex-1">
-        <Outlet />
+        {/* each page settles in; no exit wait, so navigation never feels slow */}
+        <m.div key={pathname} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35, ease: EASE_OUT }}>
+          <Outlet />
+        </m.div>
       </main>
       <Footer />
       <BottomNav />

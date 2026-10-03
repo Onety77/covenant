@@ -5,12 +5,15 @@ import { ago, change, left, usd } from '@/lib/format'
 import { current, due, statusLabel, tally } from '@/lib/covenant'
 import { TokenArt } from '@/components/ui/TokenArt'
 import { Meter } from '@/components/covenant/Meter'
+import { Ticking } from '@/components/motion/Ticking'
+import { useLive } from '@/lib/liveMarket'
 
 /** One launch on the board: logo first, then the market, then where its covenant stands. */
 export function TokenItem({ project: p, now }: { project: Project; now: number }) {
   const c = p.covenant
   const m = current(c)
-  const up = p.market.change24h >= 0
+  const live = useLive(p.id)
+  const up = live.change24h >= 0
   const curve = p.market.stage === 'curve' ? p.market.curveSol / p.market.curveTargetSol : null
 
   // one coloured mark carries the state; the words stay neutral
@@ -27,19 +30,19 @@ export function TokenItem({ project: p, now }: { project: Project; now: number }
 
   return (
     <Link to={`/p/${p.id}`} className="group flex gap-3.5 rounded-[14px] p-3 transition-colors hover-device:hover:bg-hover sm:p-3.5">
-      <TokenArt seed={p.ticker} src={p.image} size={64} className="max-sm:size-14!" />
+      <TokenArt seed={p.ticker} src={p.image} size={64} className="transition-transform duration-300 ease-out group-hover:scale-[1.04] max-sm:size-14!" />
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline justify-between gap-3">
           <p className="min-w-0 truncate">
             <span className="text-[15px] font-semibold">{p.name}</span> <span className="font-mono text-[12px] text-ink-3">${p.ticker}</span>
           </p>
-          <p className="shrink-0 font-mono text-[13px] font-medium tabular">{curve !== null ? `${Math.round(curve * 100)}%` : usd(p.market.mcapUsd)}</p>
+          <p className="shrink-0 font-mono text-[13px] font-medium tabular">{curve !== null ? `${Math.round(curve * 100)}%` : <Ticking value={live.mcap} text={usd(live.mcap)} />}</p>
         </div>
         <div className="mt-0.5 flex items-baseline justify-between gap-3 text-[12px] text-ink-3">
           <p className="min-w-0 truncate">
             {c.builder.handle} · {ago(p.launchedAt, now).replace(' ago', '')}
           </p>
-          <p className={cn('shrink-0 font-mono tabular', curve !== null ? 'text-ink-3' : up ? 'text-proven' : 'text-default')}>{curve !== null ? 'bonding' : change(p.market.change24h)}</p>
+          <p className={cn('shrink-0 font-mono tabular', curve !== null ? 'text-ink-3' : up ? 'text-proven' : 'text-default')}>{curve !== null ? 'bonding' : change(live.change24h)}</p>
         </div>
         <Meter covenant={c} now={now} className="mt-3" />
         <p className="mt-2 flex items-center gap-2 text-[12px] text-ink-2">

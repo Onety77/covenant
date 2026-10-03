@@ -8,6 +8,7 @@ import { findReview, withMine } from '@/lib/reviews'
 import { castVote, myVotes } from '@/lib/session'
 import { Notice } from '@/components/ui/Notice'
 import { TokenArt } from '@/components/ui/TokenArt'
+import { Ticking } from '@/components/motion/Ticking'
 import { Milestones } from '@/components/covenant/Milestones'
 import { VerdictForm } from '@/components/verify/VerdictForm'
 
@@ -61,7 +62,7 @@ export function Review() {
         </div>
         <div className="sm:text-right">
           <p className="label">Review closes in</p>
-          <p className="mt-1 font-mono text-[22px] font-medium tabular">{clock(closes, now)}</p>
+          <Ticking className="mt-1 font-mono text-[22px] font-medium" value={-now} text={clock(closes, now)} flash={false} />
         </div>
       </div>
 

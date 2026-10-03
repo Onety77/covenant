@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Project } from '@/types'
 import { cn } from '@/lib/cn'
+import { Done } from '@/components/motion/Done'
 import { count, left, pct, sol } from '@/lib/format'
 import { redeemRate, sampleBalance } from '@/lib/redeem'
 import { SOL_USD } from '@/lib/rules'
@@ -87,9 +88,9 @@ export function RedeemPanel({ project: p, now, onRedeem }: { project: Project; n
       <Button type="submit" variant={address ? 'danger' : 'primary'} size="lg" className="mt-4 w-full disabled:opacity-100" disabled={closed || state === 'pending' || (Boolean(address) && !n)}>
         {!address ? 'Connect wallet' : state === 'pending' ? 'Confirm in wallet…' : 'Burn and redeem'}
       </Button>
-      <p className={cn('mt-3 text-[12px] leading-relaxed', state === 'done' ? 'text-proven' : state === 'error' ? 'text-default' : 'text-ink-3')} aria-live="polite">
+      <p className={cn('mt-3 text-[12px] leading-relaxed', state === 'error' ? 'text-default' : 'text-ink-3')} aria-live="polite">
         {state === 'done' && mine
-          ? `Redeemed. You’ve burned ${count(mine.tokens)} ${p.ticker} for ${sol(mine.sol, 4)}.`
+          ? <Done>Redeemed. You’ve burned {count(mine.tokens)} {p.ticker} for {sol(mine.sol, 4)}.</Done>
           : state === 'error'
             ? 'The burn didn’t go through. Nothing was burned. Try again.'
             : 'Burning is final. If a new builder takes over, unburned tokens stay in the project.'}

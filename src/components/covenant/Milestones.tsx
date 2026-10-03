@@ -5,6 +5,8 @@ import type { Covenant, Milestone, Proof } from '@/types'
 import { cn } from '@/lib/cn'
 import { ago, date, left } from '@/lib/format'
 import { due, statusLabel, tally } from '@/lib/covenant'
+import { AnimatePresence, m as M } from 'motion/react'
+import { EASE_OUT, EASE_UI, VIEWPORT } from '@/lib/motion'
 import { PanelVotes } from './PanelVotes'
 import { VoteDots } from './VoteDots'
 
@@ -47,7 +49,14 @@ function Item({ c, m, now, last, href }: { c: Covenant; m: Milestone; now: numbe
   const k = tone(m)
 
   return (
-    <li id={`m${m.n}`} className="relative grid scroll-mt-24 grid-cols-[28px_1fr] gap-x-4 pb-10 last:pb-0">
+    <M.li
+      id={`m${m.n}`}
+      className="relative grid scroll-mt-24 grid-cols-[28px_1fr] gap-x-4 pb-10 last:pb-0"
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={VIEWPORT}
+      transition={{ duration: 0.55, ease: EASE_OUT }}
+    >
       {!last && <span aria-hidden className="absolute top-8 bottom-1 left-[13.5px] w-px bg-line-2" />}
       <span
         aria-hidden
@@ -114,7 +123,9 @@ function Item({ c, m, now, last, href }: { c: Covenant; m: Milestone; now: numbe
                 </Link>
               )}
             </div>
-            {votesOpen && <PanelVotes panel={m.panel} now={now} className="mt-4" />}
+            <Expand open={votesOpen}>
+              <PanelVotes panel={m.panel} now={now} className="pt-4" />
+            </Expand>
           </div>
         )}
 
@@ -127,17 +138,18 @@ function Item({ c, m, now, last, href }: { c: Covenant; m: Milestone; now: numbe
               <ChevronDown className={cn('size-4 transition-transform', attemptsOpen && 'rotate-180')} />
               {m.attempts.length} earlier attempt{m.attempts.length > 1 ? 's' : ''} rejected
             </button>
-            {attemptsOpen &&
-              m.attempts.map((a) => (
+            <Expand open={attemptsOpen}>
+              {m.attempts.map((a) => (
                 <div key={a.decidedAt} className="mt-3 border-l-2 border-line-2 pl-4">
                   <ProofBlock proof={a.proof} now={now} />
                   <PanelVotes panel={a.panel} now={now} className="mt-4" />
                 </div>
               ))}
+            </Expand>
           </div>
         )}
       </div>
-    </li>
+    </M.li>
   )
 }
 
@@ -167,5 +179,24 @@ function ProofBlock({ proof, now, late }: { proof: Proof; now: number; late?: bo
         ))}
       </ul>
     </div>
+  )
+}
+
+/** Content that opens and closes by height. */
+function Expand({ open, children }: { open: boolean; children: React.ReactNode }) {
+  return (
+    <AnimatePresence initial={false}>
+      {open && (
+        <M.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.3, ease: EASE_UI }}
+          className="overflow-hidden"
+        >
+          {children}
+        </M.div>
+      )}
+    </AnimatePresence>
   )
 }

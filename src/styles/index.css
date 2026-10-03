@@ -29,15 +29,16 @@
   --ink-3: rgb(237 237 234 / 0.44);
   --ink-4: rgb(237 237 234 / 0.24);
 
-  --accent: #8f80ff;          /* marks: held stripes, the pending verdict, the logo */
-  --accent-strong: #6f5ff7;   /* fills: the primary button (white text passes AA) */
-  --accent-soft: rgb(143 128 255 / 0.12);
-  --on-accent: #ffffff;
+  --accent: #ff8a3d;          /* marks: held stripes, the pending verdict, the logo */
+  --accent-strong: #ff8a3d;   /* fills: the primary button, with dark text (8:1) */
+  --accent-soft: rgb(255 138 61 / 0.12);
+  --on-accent: #160800;
 
+  /* green and red are checked against the orange (validate_palette: normal-vision ΔE 16.6) */
   --proven: #34d07f;
   --proven-soft: rgb(52 208 127 / 0.1);
-  --default: #f0544f;
-  --default-soft: rgb(240 84 79 / 0.1);
+  --default: #ff3d6e;
+  --default-soft: rgb(255 61 110 / 0.1);
   --on-default: #ffffff;
 
   --overlay: rgb(0 0 0 / 0.7);
@@ -146,3 +147,37 @@ body { margin: 0; min-height: 100svh; overflow-x: clip; }
 @keyframes skeleton { 50% { opacity: 0.5; } }
 .skeleton { background: var(--raised); border-radius: 8px; animation: skeleton 1.6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
+
+/* ───────────────── Motion ─────────────────
+   Precise and calm. Only live things keep moving: prices tick, clocks run, the ticker
+   drifts, held stake shimmers slowly, the verdict in progress breathes. JS motion lives in
+   lib/motion.ts; these are the CSS loops. All of them stop under reduced motion. */
+
+/* a live figure glows for a moment when it changes (two names so it can restart) */
+@keyframes tick-up { from { color: var(--proven); } }
+@keyframes tick-down { from { color: var(--default); } }
+.tick-up-0 { animation: tick-up 0.9s ease-out; }
+.tick-up-1 { animation: tick-up 0.9s ease-out; animation-name: tick-up, none; }
+.tick-down-0 { animation: tick-down 0.9s ease-out; }
+.tick-down-1 { animation: tick-down 0.9s ease-out; animation-name: tick-down, none; }
+
+/* held stake: the stripes drift slowly, value under lock but alive */
+@keyframes held-drift { to { background-position: 17px 0; } }
+.held-live { animation: held-drift 2.4s linear infinite; }
+
+/* the verdict in progress breathes */
+@keyframes breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+.breathe { animation: breathe 2.4s ease-in-out infinite; }
+
+/* a live dot: a soft ring leaves it every few seconds */
+@keyframes ping { 0% { transform: scale(1); opacity: 0.6; } 75%, 100% { transform: scale(2.6); opacity: 0; } }
+.ping::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: inherit; animation: ping 2.6s cubic-bezier(0, 0, 0.2, 1) infinite; }
+
+/* the ticker drifts left; it pauses when pointed at or focused (see Ticker) */
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee { animation: marquee 60s linear infinite; }
+.marquee-wrap:hover .marquee, .marquee-wrap:focus-within .marquee { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .held-live, .breathe, .ping::after, .marquee, [class*="tick-"] { animation: none !important; }
+}

@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Check, ImagePlus } from 'lucide-react'
+import { m } from 'motion/react'
+import { EASE_OUT } from '@/lib/motion'
 import { cn } from '@/lib/cn'
 import { dayErrors, draftProject, emptyDraft, type Draft } from '@/lib/draft'
 import { sol } from '@/lib/format'
@@ -153,7 +155,9 @@ export function Launch() {
                 aria-current={i === step ? 'step' : undefined}
                 className="group w-full text-left disabled:cursor-default"
               >
-                <span className={cn('block h-1 rounded-full', i <= step ? 'bg-ink' : 'bg-line-2')} />
+                <span className="block h-1 overflow-hidden rounded-full bg-line-2">
+                  <m.span className="block h-full origin-left rounded-full bg-ink" initial={false} animate={{ scaleX: i <= step ? 1 : 0 }} transition={{ duration: 0.5, ease: EASE_OUT }} />
+                </span>
                 <span className={cn('mt-2 flex items-center gap-1.5 text-[13px] font-medium', i === step ? 'text-ink' : 'text-ink-3')}>
                   {i < step ? <Check className="size-3.5" strokeWidth={3} /> : <span className="font-mono text-[11px]">{i + 1}</span>}
                   <span className="max-sm:sr-only">{s}</span>
@@ -173,109 +177,112 @@ export function Launch() {
             }}
             noValidate
           >
-            {step === 0 && (
-              <div className="grid gap-6">
-                <div className="flex items-center gap-4">
-                  <TokenArt seed={preview.ticker} src={d.image} size={72} />
-                  <label className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-control bg-raised px-3.5 text-[14px] font-semibold has-focus-visible:outline-2 has-focus-visible:outline-accent">
-                    <ImagePlus className="size-4" /> {d.image ? 'Change image' : 'Add image'}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="sr-only"
-                      onChange={(e) => {
-                        const f = e.target.files?.[0]
-                        if (f) setD({ ...d, image: URL.createObjectURL(f) })
-                      }}
+            <m.div key={step} initial={{ opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4, ease: EASE_OUT }}>
+              {step === 0 && (
+                <div className="grid gap-6">
+                  <div className="flex items-center gap-4">
+                    <TokenArt seed={preview.ticker} src={d.image} size={72} />
+                    <label className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-control bg-raised px-3.5 text-[14px] font-semibold has-focus-visible:outline-2 has-focus-visible:outline-accent">
+                      <ImagePlus className="size-4" /> {d.image ? 'Change image' : 'Add image'}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="sr-only"
+                        onChange={(e) => {
+                          const f = e.target.files?.[0]
+                          if (f) setD({ ...d, image: URL.createObjectURL(f) })
+                        }}
+                      />
+                    </label>
+                  </div>
+                  <div className="grid gap-5 sm:grid-cols-[1fr_180px]">
+                    <Field label="Name" name="name" autoComplete="off" value={d.name} onChange={(e) => setD({ ...d, name: e.target.value })} maxLength={32} error={tried ? tokenErrors.name : null} />
+                    <Field
+                      label="Ticker"
+                      name="ticker"
+                      autoComplete="off"
+                      autoCapitalize="characters"
+                      value={d.ticker}
+                      onChange={(e) => setD({ ...d, ticker: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '') })}
+                      maxLength={8}
+                      className="[&_input]:font-mono"
+                      error={tried ? tokenErrors.ticker : null}
                     />
-                  </label>
-                </div>
-                <div className="grid gap-5 sm:grid-cols-[1fr_180px]">
-                  <Field label="Name" name="name" autoComplete="off" value={d.name} onChange={(e) => setD({ ...d, name: e.target.value })} maxLength={32} error={tried ? tokenErrors.name : null} />
-                  <Field
-                    label="Ticker"
-                    name="ticker"
-                    autoComplete="off"
-                    autoCapitalize="characters"
-                    value={d.ticker}
-                    onChange={(e) => setD({ ...d, ticker: e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '') })}
-                    maxLength={8}
-                    className="[&_input]:font-mono"
-                    error={tried ? tokenErrors.ticker : null}
-                  />
-                </div>
-                <Field label="One line" name="tagline" value={d.tagline} onChange={(e) => setD({ ...d, tagline: e.target.value })} maxLength={60} hint="What you’re building, in the words holders will see first" error={tried ? tokenErrors.tagline : null} />
-                <p className="text-[13px] leading-relaxed text-ink-3">
-                  Launches as a Token-2022 token on Meteora’s bonding curve. 1B supply, metadata fixed at launch.
-                </p>
-              </div>
-            )}
-
-            {step === 1 && (
-              <div className="grid gap-4">
-                <p className="text-[15px] leading-relaxed text-ink-2">
-                  Three things that will be true, each one checkable by a stranger. Verifiers judge the measure exactly as written, so write it the way you’d want it read.
-                </p>
-                {d.milestones.map((m, i) => (
-                  <MilestoneEditor
-                    key={i}
-                    n={i + 1}
-                    value={m}
-                    start={preview.covenant.startedAt}
-                    errors={tried ? msErrors[i] : { dueDay: days[i] }}
-                    onChange={(v) => setD({ ...d, milestones: d.milestones.map((x, j) => (j === i ? v : x)) })}
-                  />
-                ))}
-              </div>
-            )}
-
-            {step === 2 && (
-              <div className="grid gap-3">
-                <p className="text-[15px] leading-relaxed text-ink-2">These terms are the same for every launch. Confirm each one; they’re locked when you sign.</p>
-                {[
-                  [`${BOND_SOL} SOL bond`, `Taken from your wallet at launch. Returned on day 90 if all three milestones are proven; forfeit to holders on a default.`],
-                  [`${ESCROW_PCT}% of supply in escrow`, `Your allocation unlocks 5% per proven milestone. Unproven shares pass to a replacement builder after a default.`],
-                  ['Every creator fee', 'Your share of trading fees goes into the covenant and is released with your milestones. On a default, unreleased fees go to holders.'],
-                ].map(([t, b], i) => (
-                  <label key={t} className={cn('flex cursor-pointer gap-4 rounded-[14px] bg-surface p-4 ring-1 transition-shadow sm:p-5', acks[i] ? 'ring-ink-3' : 'ring-transparent', tried && !acks[i] && 'ring-default')}>
-                    <span aria-hidden className="held mt-0.5 h-10 w-12 shrink-0 rounded-[5px] bg-raised" />
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-[16px] font-semibold">{t}</span>
-                      <span className="mt-1 block text-[14px] leading-relaxed text-ink-2">{b}</span>
-                    </span>
-                    <input type="checkbox" checked={acks[i]} onChange={(e) => setAcks(acks.map((a, j) => (j === i ? e.target.checked : a)))} className="mt-1 size-5 shrink-0 accent-[var(--accent)]" />
-                  </label>
-                ))}
-                <p className="mt-2 text-[13px] text-ink-3">At graduation, the curve’s liquidity moves to a DAMM v2 pool and is locked permanently. That isn’t yours to stake; it belongs to the market.</p>
-              </div>
-            )}
-
-            {step === 3 && (
-              <div className="grid gap-4">
-                <dl className="divide-y divide-line">
-                  {[
-                    ['Token', `${d.name} · $${d.ticker}`],
-                    ...d.milestones.map((m, i) => [`M${i + 1} · day ${m.dueDay}`, `${m.title}: ${m.target}`]),
-                    ['You put up', `${BOND_SOL} SOL · ${ESCROW_PCT}% of supply · all creator fees`],
-                    ['Wallet', address ? `${address} · ${sol(BALANCE)}` : 'Not connected'],
-                  ].map(([k, v]) => (
-                    <div key={k} className="grid gap-1 py-3.5 sm:grid-cols-[150px_1fr] sm:gap-4">
-                      <dt className="label pt-0.5">{k}</dt>
-                      <dd className="text-[14px]">{v}</dd>
-                    </div>
-                  ))}
-                </dl>
-                <label className={cn('flex items-start gap-3 rounded-[14px] bg-surface p-4 text-[14px] leading-relaxed ring-1 sm:p-5', tried && !final ? 'ring-default' : 'ring-transparent')}>
-                  <input type="checkbox" checked={final} onChange={(e) => setFinal(e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-[var(--default)]" />
-                  If a deadline passes without approved proof, the covenant defaults on its own. I lose what’s still held, and nobody, including me, can stop it.
-                </label>
-                {phase === 'error' && (
-                  <p role="alert" className="text-[13px] text-default">
-                    The launch didn’t go through. No bond was taken. Try again.
+                  </div>
+                  <Field label="One line" name="tagline" value={d.tagline} onChange={(e) => setD({ ...d, tagline: e.target.value })} maxLength={60} hint="What you’re building, in the words holders will see first" error={tried ? tokenErrors.tagline : null} />
+                  <p className="text-[13px] leading-relaxed text-ink-3">
+                    Launches as a Token-2022 token on Meteora’s bonding curve. 1B supply, metadata fixed at launch.
                   </p>
-                )}
-              </div>
-            )}
+                </div>
+              )}
+
+              {step === 1 && (
+                <div className="grid gap-4">
+                  <p className="text-[15px] leading-relaxed text-ink-2">
+                    Three things that will be true, each one checkable by a stranger. Verifiers judge the measure exactly as written, so write it the way you’d want it read.
+                  </p>
+                  {d.milestones.map((m, i) => (
+                    <MilestoneEditor
+                      key={i}
+                      n={i + 1}
+                      value={m}
+                      start={preview.covenant.startedAt}
+                      errors={tried ? msErrors[i] : { dueDay: days[i] }}
+                      onChange={(v) => setD({ ...d, milestones: d.milestones.map((x, j) => (j === i ? v : x)) })}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {step === 2 && (
+                <div className="grid gap-3">
+                  <p className="text-[15px] leading-relaxed text-ink-2">These terms are the same for every launch. Confirm each one; they’re locked when you sign.</p>
+                  {[
+                    [`${BOND_SOL} SOL bond`, `Taken from your wallet at launch. Returned on day 90 if all three milestones are proven; forfeit to holders on a default.`],
+                    [`${ESCROW_PCT}% of supply in escrow`, `Your allocation unlocks 5% per proven milestone. Unproven shares pass to a replacement builder after a default.`],
+                    ['Every creator fee', 'Your share of trading fees goes into the covenant and is released with your milestones. On a default, unreleased fees go to holders.'],
+                  ].map(([t, b], i) => (
+                    <label key={t} className={cn('flex cursor-pointer gap-4 rounded-[14px] bg-surface p-4 ring-1 transition-shadow sm:p-5', acks[i] ? 'ring-ink-3' : 'ring-transparent', tried && !acks[i] && 'ring-default')}>
+                      <span aria-hidden className="held mt-0.5 h-10 w-12 shrink-0 rounded-[5px] bg-raised" />
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-[16px] font-semibold">{t}</span>
+                        <span className="mt-1 block text-[14px] leading-relaxed text-ink-2">{b}</span>
+                      </span>
+                      <input type="checkbox" checked={acks[i]} onChange={(e) => setAcks(acks.map((a, j) => (j === i ? e.target.checked : a)))} className="mt-1 size-5 shrink-0 accent-[var(--accent)]" />
+                    </label>
+                  ))}
+                  <p className="mt-2 text-[13px] text-ink-3">At graduation, the curve’s liquidity moves to a DAMM v2 pool and is locked permanently. That isn’t yours to stake; it belongs to the market.</p>
+                </div>
+              )}
+
+              {step === 3 && (
+                <div className="grid gap-4">
+                  <dl className="divide-y divide-line">
+                    {[
+                      ['Token', `${d.name} · $${d.ticker}`],
+                      ...d.milestones.map((m, i) => [`M${i + 1} · day ${m.dueDay}`, `${m.title}: ${m.target}`]),
+                      ['You put up', `${BOND_SOL} SOL · ${ESCROW_PCT}% of supply · all creator fees`],
+                      ['Wallet', address ? `${address} · ${sol(BALANCE)}` : 'Not connected'],
+                    ].map(([k, v]) => (
+                      <div key={k} className="grid gap-1 py-3.5 sm:grid-cols-[150px_1fr] sm:gap-4">
+                        <dt className="label pt-0.5">{k}</dt>
+                        <dd className="text-[14px]">{v}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                  <label className={cn('flex items-start gap-3 rounded-[14px] bg-surface p-4 text-[14px] leading-relaxed ring-1 sm:p-5', tried && !final ? 'ring-default' : 'ring-transparent')}>
+                    <input type="checkbox" checked={final} onChange={(e) => setFinal(e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-[var(--default)]" />
+                    If a deadline passes without approved proof, the covenant defaults on its own. I lose what’s still held, and nobody, including me, can stop it.
+                  </label>
+                  {phase === 'error' && (
+                    <p role="alert" className="text-[13px] text-default">
+                      The launch didn’t go through. No bond was taken. Try again.
+                    </p>
+                  )}
+                </div>
+              )}
+
+            </m.div>
 
             {tried && !valid[step] && (
               <p role="alert" className="mt-4 text-[13px] text-default">

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { activity, getProject, projects } from '@/data/projects'
 import { cn } from '@/lib/cn'
@@ -9,6 +9,11 @@ import { useDemoState } from '@/lib/hooks'
 import { useNow } from '@/lib/live'
 import { protocolStats } from '@/lib/stats'
 import { BOND_SOL, ESCROW_PCT, NEEDED, PANEL, TERM_DAYS } from '@/lib/rules'
+import { AnimatePresence, m } from 'motion/react'
+import { EASE_OUT, SPRING_SOFT } from '@/lib/motion'
+import { CountUp } from '@/components/motion/CountUp'
+import { MaskLine } from '@/components/motion/MaskLine'
+import { Item, Stagger } from '@/components/motion/Reveal'
 import { Button } from '@/components/ui/Button'
 import { Notice } from '@/components/ui/Notice'
 import { Tabs } from '@/components/ui/Tabs'
@@ -39,8 +44,6 @@ const steps = [
 export function Home() {
   const now = useNow()
   const state = useDemoState()
-  const [params, setParams] = useSearchParams()
-  const q = params.get('q') ?? ''
   const [filter, setFilter] = useState<Filter>('all')
   const [sort, setSort] = useState<Sort>('due')
   const stats = protocolStats()
@@ -52,8 +55,7 @@ export function Home() {
   }, [])
 
   // cheap enough to recompute on every render
-  const term = q.trim().toLowerCase()
-  const rows = state === 'empty' ? [] : projects.filter((p) => (filter === 'all' || standing(p) === filter) && (!term || `${p.name} ${p.ticker} ${p.tagline}`.toLowerCase().includes(term)))
+  const rows = state === 'empty' ? [] : projects.filter((p) => filter === 'all' || standing(p) === filter)
   const nextDue = (p: (typeof projects)[number]) => {
     const m = p.covenant.milestones.find((x) => x.status !== 'proven')
     return p.covenant.state === 'active' && m ? Date.parse(p.covenant.startedAt) + m.dueDay * 864e5 : Infinity
@@ -65,35 +67,55 @@ export function Home() {
     <>
       <section className="wrap grid gap-12 pt-10 pb-12 lg:grid-cols-12 lg:items-center lg:gap-14 lg:pt-20 lg:pb-20 [&>*]:min-w-0">
         <div className="lg:col-span-5">
-          <p className="inline-flex items-center gap-2 rounded-full bg-raised py-1 pr-3 pl-2.5 text-[12px] text-ink-2">
-            <span aria-hidden className="size-1.5 rounded-full bg-accent" />
+          <m.p
+            className="inline-flex items-center gap-2 rounded-full bg-raised py-1 pr-3 pl-2.5 text-[12px] text-ink-2"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: EASE_OUT }}
+          >
+            <span aria-hidden className="ping relative size-1.5 rounded-full bg-accent" />
             {stats.live} covenants live on Solana
-          </p>
-          <h1 className="mt-5 text-display">Launch with something at&nbsp;stake.</h1>
-          <p className="mt-5 max-w-md text-[16px] leading-relaxed text-ink-2 sm:text-[17px]">
-            Every token on Covenant ships with a bonded roadmap. Builders who deliver get paid. Builders who don’t pay their holders.
-          </p>
-          <div className="mt-8 flex gap-2">
-            <Button variant="primary" size="lg" to="/launch" className="max-sm:flex-1">
-              Launch a token
-            </Button>
-            <Button size="lg" to="#board" className="max-sm:flex-1">
-              Explore tokens
-            </Button>
-          </div>
-          <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-1.5 font-mono text-[12px] text-ink-3">
-            <li className="whitespace-nowrap">
-              <span className="text-ink">{sol(stats.atStake, 0)}</span> at stake
-            </li>
-            <li className="whitespace-nowrap">
-              <span className="text-ink">{sol(stats.toHolders, 0)}</span> paid to holders
-            </li>
-            <li className="whitespace-nowrap">
-              <span className="text-ink">{stats.proven}</span> milestones proven
-            </li>
-          </ul>
+          </m.p>
+          <h1 className="mt-5 text-display">
+            <span className="sr-only">Launch with something at stake.</span>
+            <span aria-hidden>
+              <MaskLine delay={0.08}>Launch with</MaskLine>
+              <MaskLine delay={0.16}>something at&nbsp;stake.</MaskLine>
+            </span>
+          </h1>
+          <m.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.35, ease: EASE_OUT }}>
+            <p className="mt-5 max-w-md text-[16px] leading-relaxed text-ink-2 sm:text-[17px]">
+              Every token on Covenant ships with a bonded roadmap. Builders who deliver get paid. Builders who don’t pay their holders.
+            </p>
+            <div className="mt-8 flex gap-2">
+              <Button variant="primary" size="lg" to="/launch" className="max-sm:flex-1">
+                Launch a token
+              </Button>
+              <Button size="lg" to="#board" className="max-sm:flex-1">
+                Explore tokens
+              </Button>
+            </div>
+            <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-1.5 font-mono text-[12px] text-ink-3">
+              <li className="whitespace-nowrap">
+                <CountUp className="text-ink" value={stats.atStake} format={(n) => sol(n, 0)} delay={0.5} /> at stake
+              </li>
+              <li className="whitespace-nowrap">
+                <CountUp className="text-ink" value={stats.toHolders} format={(n) => sol(n, 0)} delay={0.6} /> paid to holders
+              </li>
+              <li className="whitespace-nowrap">
+                <CountUp className="text-ink" value={stats.proven} format={(n) => String(Math.round(n))} delay={0.7} /> milestones proven
+              </li>
+            </ul>
+          </m.div>
         </div>
-        <LiveCovenant project={getProject('lantern')!} now={now} className="lg:col-span-7" />
+        <m.div
+          className="lg:col-span-7"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.25, ease: EASE_OUT }}
+        >
+          <LiveCovenant project={getProject('lantern')!} now={now} drawDelay={0.55} />
+        </m.div>
       </section>
 
       <Ticker items={activity} now={now} />
@@ -101,7 +123,7 @@ export function Home() {
       <section id="board" aria-labelledby="board-title" className="wrap scroll-mt-16 pt-10 pb-16 lg:pt-12">
         <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
           <h2 id="board-title" className="text-h2">
-            {q ? `Results for “${q}”` : 'The board'}
+            The board
           </h2>
           <label className="flex items-center gap-2 text-[13px] text-ink-3">
             Sort
@@ -125,18 +147,26 @@ export function Home() {
             <Notice kind="error" title="The board didn’t load." body="We couldn’t reach the network. Your wallet and funds aren’t affected." action="Try again" onAction={() => location.reload()} />
           ) : list.length ? (
             <ul className="-mx-3 grid gap-x-4 gap-y-1 md:grid-cols-2 xl:grid-cols-3">
-              {list.map((p) => (
-                <li key={p.id} className="min-w-0">
-                  <TokenItem project={p} now={now} />
-                </li>
-              ))}
+              <AnimatePresence mode="popLayout" initial={false}>
+                {list.map((p, i) => (
+                  <m.li
+                    key={p.id}
+                    layout
+                    className="min-w-0"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.98, transition: { duration: 0.15 } }}
+                    transition={{ duration: 0.4, delay: Math.min(i, 8) * 0.03, ease: EASE_OUT, layout: SPRING_SOFT }}
+                  >
+                    <TokenItem project={p} now={now} />
+                  </m.li>
+                ))}
+              </AnimatePresence>
             </ul>
           ) : (
             <Notice
-              title={q ? `Nothing matches “${q}”.` : 'Nothing here yet.'}
-              body={q ? 'Try a ticker, or clear the search.' : 'When a builder signs a covenant and launches, it shows up here.'}
-              action={q ? 'Clear search' : undefined}
-              onAction={() => setParams({})}
+              title="Nothing here yet."
+              body="When a builder signs a covenant and launches, it shows up here."
             />
           )}
         </div>
@@ -152,18 +182,18 @@ export function Home() {
               Read the rules <ArrowRight className="size-4" />
             </Link>
           </div>
-          <ol className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          <Stagger as="ol" className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
             {steps.map(([t, b], i) => (
-              <li key={t}>
+              <Item as="li" key={t}>
                 <div className="flex items-center gap-2">
                   <span className={cn('grid size-6 place-items-center rounded-[6px] font-mono text-[11px] font-medium', 'bg-raised text-ink-2')}>{i + 1}</span>
                   <span aria-hidden className="h-px flex-1 bg-line-2 max-lg:hidden" />
                 </div>
                 <p className="mt-4 font-display text-[17px] font-semibold tracking-[-0.03em]">{t}</p>
                 <p className="mt-2 text-[14px] leading-relaxed text-ink-2">{b}</p>
-              </li>
+              </Item>
             ))}
-          </ol>
+          </Stagger>
         </div>
       </section>
     </>

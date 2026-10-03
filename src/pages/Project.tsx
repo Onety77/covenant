@@ -19,6 +19,10 @@ import { Meter } from '@/components/covenant/Meter'
 import { Milestones } from '@/components/covenant/Milestones'
 import { TermRail } from '@/components/covenant/TermRail'
 import { Candles } from '@/components/market/Candles'
+import { Ticking } from '@/components/motion/Ticking'
+import { m as M } from 'motion/react'
+import { EASE_OUT } from '@/lib/motion'
+import { useLive } from '@/lib/liveMarket'
 import { HoldersList } from '@/components/market/HoldersList'
 import { TradesList } from '@/components/market/TradesList'
 import { Backing } from '@/components/project/Backing'
@@ -40,6 +44,7 @@ export function ProjectPage() {
   const { id = '' } = useParams()
   const now = useNow()
   const p = getProject(id)
+  const live = useLive(id) ?? { price: 0, change24h: 0, mcap: 0, tick: 0 }
   // the action panel renders once: beside the content on desktop, inline under the covenant on phones
   const wide = useMedia('(min-width: 1024px)')
   const [tab, setTab] = useState<Tab>(p?.covenant.state === 'defaulted' ? 'takeover' : 'milestones')
@@ -68,9 +73,9 @@ export function ProjectPage() {
     ...(p.previous?.length ? [{ id: 'history' as const, label: 'First covenant' }] : []),
   ]
   const figures: [string, string][] = [
-    ['Market cap', usd(m.mcapUsd)],
+    ['Market cap', usd(live.mcap)],
     [m.stage === 'curve' ? 'Curve' : 'Liquidity', m.stage === 'curve' ? `${Math.round((m.curveSol / m.curveTargetSol) * 100)}%` : usd(m.liquidityUsd)],
-    ['24h', change(m.change24h)],
+    ['24h', change(live.change24h)],
     ['Vol 24h', usd(m.volume24hUsd)],
     ['Holders', count(m.holders)],
     ['Proven', `${provenCount(c)}/3`],
@@ -120,16 +125,16 @@ export function ProjectPage() {
             </div>
           </div>
           <div className="text-right max-sm:hidden">
-            <p className="font-mono text-[26px] font-medium tracking-[-0.03em] tabular">{price(m.priceUsd)}</p>
-            <p className={cn('font-mono text-[13px]', m.change24h >= 0 ? 'text-proven' : 'text-default')}>{change(m.change24h)} 24h</p>
+            <Ticking className="font-mono text-[26px] font-medium tracking-[-0.03em]" value={live.price} text={price(live.price)} />
+            <p className={cn('font-mono text-[13px]', live.change24h >= 0 ? 'text-proven' : 'text-default')}>{change(live.change24h)} 24h</p>
           </div>
         </header>
 
         <dl className="mt-5 grid grid-cols-3 gap-x-4 gap-y-4 sm:flex sm:gap-7">
           <div className="min-w-0 sm:hidden">
             <dt className="label">Price</dt>
-            <dd className={cn('mt-1 truncate font-mono text-[14px] font-medium', m.change24h >= 0 ? 'text-proven' : 'text-default')}>
-              {price(m.priceUsd)}
+            <dd className={cn('mt-1 truncate font-mono text-[14px] font-medium', live.change24h >= 0 ? 'text-proven' : 'text-default')}>
+              <Ticking value={live.price} text={price(live.price)} flash={false} />
             </dd>
           </div>
           {figures.map(([k, v]) => (
@@ -142,7 +147,7 @@ export function ProjectPage() {
 
         <div className="mt-6 grid gap-8 lg:grid-cols-12 lg:gap-8 [&>*]:min-w-0">
           <div className="lg:col-span-8">
-            <Candles seed={p.id} last={m.priceUsd} change={m.change24h} className="h-56 sm:h-72 lg:h-80" />
+            <Candles seed={p.id} base={m.priceUsd} change={m.change24h} live={live.price} className="h-56 sm:h-72 lg:h-80" />
 
             {defaulted && c.default && (
               <div role="status" className="mt-8 rounded-[14px] bg-surface p-4 sm:p-5">
@@ -175,7 +180,7 @@ export function ProjectPage() {
 
             <section aria-label="Details" className="mt-12">
               <Tabs label="Token details" value={tab} onChange={setTab} items={tabs} className="-mx-1 px-1" />
-              <div className="mt-7">
+              <M.div key={tab} className="mt-7" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE_OUT }}>
                 {tab === 'milestones' && <Milestones covenant={c} now={now} reviewHref={(x) => (x.status === 'review' ? `/verify/${reviewId(p, x)}` : undefined)} />}
                 {tab === 'takeover' && c.default && (
                   <>
@@ -212,7 +217,7 @@ export function ProjectPage() {
                       <Milestones covenant={pc} now={now} only={pc.milestones.filter((x) => x.proof).map((x) => x.n)} className="mt-8" />
                     </div>
                   ))}
-              </div>
+              </M.div>
             </section>
           </div>
 

@@ -8,14 +8,17 @@ import { TERM_DAYS } from '@/lib/rules'
 import { Button } from '@/components/ui/Button'
 import { TokenArt } from '@/components/ui/TokenArt'
 import { TermRail } from '@/components/covenant/TermRail'
+import { Ticking } from '@/components/motion/Ticking'
+import { useLive } from '@/lib/liveMarket'
 import { VoteDots } from '@/components/covenant/VoteDots'
 
 /**
  * The product, shown as the hero: one live covenant with its term, what's held against it,
  * and the verdict in progress.
  */
-export function LiveCovenant({ project: p, now, className }: { project: Project; now: number; className?: string }) {
+export function LiveCovenant({ project: p, now, drawDelay = 0, className }: { project: Project; now: number; drawDelay?: number; className?: string }) {
   const c = p.covenant
+  const live = useLive(p.id)
   const m = current(c)!
   const t = tally(m.panel)
   return (
@@ -34,19 +37,19 @@ export function LiveCovenant({ project: p, now, className }: { project: Project;
             </p>
           </div>
           <div className="text-right">
-            <p className="font-mono text-[15px] font-medium tabular">{price(p.market.priceUsd)}</p>
-            <p className={cn('font-mono text-[12px] tabular', p.market.change24h >= 0 ? 'text-proven' : 'text-default')}>{change(p.market.change24h)}</p>
+            <Ticking className="font-mono text-[15px] font-medium" value={live.price} text={price(live.price)} />
+            <p className={cn('font-mono text-[12px] tabular', live.change24h >= 0 ? 'text-proven' : 'text-default')}>{change(live.change24h)}</p>
           </div>
         </header>
 
         <div className="px-5 pt-6 pb-5 sm:px-6">
-          <TermRail covenant={c} now={now} stacked />
+          <TermRail covenant={c} now={now} stacked delay={drawDelay} />
         </div>
 
         <footer className="flex flex-wrap items-center gap-x-4 gap-y-3 border-t border-line bg-[color-mix(in_srgb,var(--surface)_60%,var(--bg))] px-5 py-4 sm:px-6">
           <div className="min-w-0 flex-1">
             <p className="flex items-center gap-2 text-[13px]">
-              <span aria-hidden className="size-1.5 rounded-full bg-accent" />
+              <span aria-hidden className="ping relative size-1.5 shrink-0 rounded-full bg-accent" />
               <span className="truncate">
                 <span className="font-medium">M{m.n} · {m.title}</span> <span className="text-ink-3">in review</span>
               </span>

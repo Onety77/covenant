@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { LazyMotion, MotionConfig, domMax } from 'motion/react'
 import { Shell } from '@/components/layout/Shell'
 import { Home } from '@/pages/Home'
 import { ProjectPage } from '@/pages/Project'
@@ -11,6 +12,9 @@ import { NotFound } from '@/pages/NotFound'
 
 export default function App() {
   return (
+    <LazyMotion features={domMax} strict>
+      {/* reduced motion: transforms drop, fades stay; loops check useReducedMotion() themselves */}
+      <MotionConfig reducedMotion="user">
     <BrowserRouter>
       <Routes>
         <Route element={<Shell />}>
@@ -26,5 +30,7 @@ export default function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+      </MotionConfig>
+    </LazyMotion>
   )
 }
