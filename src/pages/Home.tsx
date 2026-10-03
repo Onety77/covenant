@@ -9,6 +9,7 @@ import { useDemoState } from '@/lib/hooks'
 import { useNow } from '@/lib/live'
 import { protocolStats } from '@/lib/stats'
 import { BOND_SOL, ESCROW_PCT, NEEDED, PANEL, TERM_DAYS } from '@/lib/rules'
+import { Button } from '@/components/ui/Button'
 import { Notice } from '@/components/ui/Notice'
 import { Tabs } from '@/components/ui/Tabs'
 import { Spotlight } from '@/components/board/Spotlight'
@@ -64,24 +65,32 @@ export function Home() {
     <>
       <Ticker items={activity} now={now} />
 
-      <section className="wrap grid gap-5 pt-6 pb-7 lg:grid-cols-12 lg:items-end lg:gap-10 lg:pt-12 lg:pb-12 [&>*]:min-w-0">
-        <div className="lg:col-span-8">
-          <h1 className="text-display">
-            Launch with <span className="text-accent">something at&nbsp;stake.</span>
-          </h1>
-          <p className="mt-3 max-w-lg text-[14px] leading-relaxed text-ink-2 sm:mt-4 sm:text-[16px]">
+      <section className="wrap grid gap-6 pt-7 pb-6 sm:gap-8 sm:pb-8 lg:grid-cols-12 lg:items-end lg:gap-12 lg:pt-14 lg:pb-14 [&>*]:min-w-0">
+        <div className="lg:col-span-7">
+          <h1 className="text-display">Launch with something at&nbsp;stake.</h1>
+          <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-ink-2 sm:text-[17px]">
             Every token here comes with a bonded roadmap. Builders who deliver get paid. Builders who don’t pay their holders.
           </p>
+          <div className="mt-6 flex gap-2">
+            <Button variant="primary" size="lg" to="/launch" className="max-sm:h-11 max-sm:flex-1">
+              Launch a token
+            </Button>
+            <Button size="lg" to="/rules" className="max-sm:h-11 max-sm:flex-1">
+              How it works
+            </Button>
+          </div>
         </div>
-        <dl className="grid grid-cols-3 gap-4 lg:col-span-4 lg:gap-6">
+        <dl className="grid grid-cols-2 border-line max-lg:border-t lg:col-span-5 lg:border-l lg:pl-12">
           {[
-            ['At stake', sol(stats.atStake, 0)],
-            ['To holders', sol(stats.toHolders, 0)],
-            ['Proven', String(stats.proven)],
-          ].map(([k, v]) => (
-            <div key={k} className="min-w-0">
+            ['At stake now', sol(stats.atStake, 0), 'bonds and unreleased fees'],
+            ['Paid to holders', sol(stats.toHolders, 0), 'from defaulted covenants'],
+            ['Live covenants', String(stats.live), `of ${projects.length} launches`],
+            ['Milestones proven', String(stats.proven), 'by verifier panels'],
+          ].map(([k, v, note], i) => (
+            <div key={k} className={cn('min-w-0 py-3 sm:py-4 lg:py-5', i % 2 === 1 && 'pl-5 lg:pl-8', i < 2 && 'border-b border-line')}>
               <dt className="label">{k}</dt>
-              <dd className="mt-1 truncate font-mono text-[16px] font-medium tracking-[-0.02em] sm:text-[22px]">{v}</dd>
+              <dd className="mt-1 truncate font-mono text-[18px] font-medium tracking-[-0.02em] sm:mt-1.5 sm:text-[26px]">{v}</dd>
+              <dd className="mt-0.5 truncate text-[12px] text-ink-3 max-sm:hidden">{note}</dd>
             </div>
           ))}
         </dl>

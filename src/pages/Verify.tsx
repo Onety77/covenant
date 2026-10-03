@@ -72,17 +72,11 @@ export function Verify() {
           {voted.length > 0 && (
             <Group title="Voted, still open" count={voted.length}>
               <ul className="-mx-3">
-                {voted.map((r) => {
-                  const v = r.panel.find((x) => x.verifierId === me.id)!
-                  return (
-                    <li key={r.id} className="relative">
-                      <ReviewRow item={r} now={now} panel={r.panel} />
-                      <span className={cn('pointer-events-none absolute top-3 right-3 font-mono text-[10px] uppercase', v.verdict === 'approve' ? 'text-proven' : 'text-default')}>
-                        You {v.verdict === 'approve' ? 'approved' : 'rejected'}
-                      </span>
-                    </li>
-                  )
-                })}
+                {voted.map((r) => (
+                  <li key={r.id}>
+                    <ReviewRow item={r} now={now} panel={r.panel} mine={r.panel.find((x) => x.verifierId === me.id)?.verdict} />
+                  </li>
+                ))}
               </ul>
             </Group>
           )}

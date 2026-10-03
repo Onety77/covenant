@@ -2,10 +2,10 @@
 
 /*
   Covenant: a launchpad where the roadmap is bonded.
-  One dark world. Near-black ground with a cool bias, hazard yellow for what's at stake
-  and for the one action that matters, and verdict colours (proven, in review, default)
-  that never double as the accent. Value held under a covenant is drawn in yellow
-  stripes, released value solid green, forfeited value red.
+  One dark world. Near-black ground, white for actions, and one brand violet that marks
+  what a builder has put up (held value is drawn in violet stripes). Verdict colours
+  (proven green, review amber, default red) carry state and never double as the brand.
+  Released value is solid green, forfeited value red.
   Layout rule: separate things with space and tone, not boxes. Panels only where
   something is operated (trade, redeem, verdict).
 */
@@ -26,14 +26,15 @@
   --ink-3: rgb(242 243 240 / 0.46);
   --ink-4: rgb(242 243 240 / 0.26);
 
-  --accent: #ffd60a;
-  --accent-soft: rgb(255 214 10 / 0.12);
-  --on-accent: #0a0b0d;
+  /* the brand: what a builder has put up. Held stripes, links, the mark. Never a button fill. */
+  --accent: #8f80ff;
+  --accent-soft: rgb(143 128 255 / 0.14);
+  --on-accent: #0c0921;
 
   --proven: #3ddc84;
   --proven-soft: rgb(61 220 132 / 0.12);
-  --review: #9aa8ff;
-  --review-soft: rgb(154 168 255 / 0.13);
+  --review: #f2b544;
+  --review-soft: rgb(242 181 68 / 0.13);
   --default: #ff4d4d;
   --default-soft: rgb(255 77 77 / 0.12);
   --on-default: #160303;
@@ -66,18 +67,18 @@
 
 @theme {
   --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Unbounded Variable", "Geist Variable", ui-sans-serif, sans-serif;
+  --font-display: "Mona Sans Variable", "Geist Variable", ui-sans-serif, sans-serif;
   --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", monospace;
 
-  --text-display: clamp(1.875rem, 1.2rem + 3vw, 3.75rem);
-  --text-display--line-height: 1;
-  --text-display--letter-spacing: -0.04em;
-  --text-h1: clamp(1.625rem, 1.2rem + 1.8vw, 2.5rem);
-  --text-h1--line-height: 1.05;
-  --text-h1--letter-spacing: -0.035em;
-  --text-h2: clamp(1.25rem, 1rem + 1vw, 1.75rem);
-  --text-h2--line-height: 1.15;
-  --text-h2--letter-spacing: -0.03em;
+  --text-display: clamp(2rem, 1.3rem + 2.9vw, 3.75rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.035em;
+  --text-h1: clamp(1.625rem, 1.25rem + 1.6vw, 2.5rem);
+  --text-h1--line-height: 1.08;
+  --text-h1--letter-spacing: -0.03em;
+  --text-h2: clamp(1.25rem, 1.05rem + 0.8vw, 1.625rem);
+  --text-h2--line-height: 1.2;
+  --text-h2--letter-spacing: -0.025em;
 
   --radius-card: 14px;
   --radius-control: 10px;
@@ -104,28 +105,36 @@
   color: var(--ink-3);
 }
 
-/* value held under a covenant: hazard stripes in the accent */
+/* value held under a covenant: stripes in the brand colour */
 @utility held {
-  background-image: repeating-linear-gradient(-45deg, var(--held-c, rgb(255 214 10 / 0.75)) 0 2px, transparent 2px 6px);
+  background-image: repeating-linear-gradient(-45deg, var(--held-c, rgb(143 128 255 / 0.8)) 0 2px, transparent 2px 6px);
 }
 @utility no-scrollbar {
   scrollbar-width: none;
   &::-webkit-scrollbar { display: none; }
 }
 
+/*
+  Page ground, text colour and font are unlayered on purpose: a host page (an embed, a
+  preview frame) may ship its own unlayered reset, and unlayered rules beat anything in
+  @layer base. These must win everywhere or sections without a fill turn the host's colour.
+*/
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+body { margin: 0; min-height: 100svh; overflow-x: clip; }
+#root { min-height: 100svh; display: flex; flex-direction: column; }
+
 @layer base {
-  html {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--font-sans);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-tap-highlight-color: transparent;
-  }
-  body { min-height: 100svh; overflow-x: clip; background: var(--bg); }
-  #root { min-height: 100svh; display: flex; flex-direction: column; }
   h1, h2, h3 { text-wrap: balance; }
-  h1, h2 { font-family: var(--font-display); font-weight: 600; }
+  h1, h2 { font-family: var(--font-display); font-weight: 650; font-stretch: 108%; }
+  .font-display { font-stretch: 108%; }
   p { text-wrap: pretty; }
   ::selection { background: var(--accent); color: var(--on-accent); }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }

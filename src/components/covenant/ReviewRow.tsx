@@ -7,7 +7,7 @@ import { TokenArt } from '@/components/ui/TokenArt'
 import { VoteDots } from './VoteDots'
 
 /** A milestone waiting on verifiers: the claim, the panel so far, and the time left. */
-export function ReviewRow({ item, now, panel }: { item: ReviewItem; now: number; panel?: Vote[] }) {
+export function ReviewRow({ item, now, panel, mine }: { item: ReviewItem; now: number; panel?: Vote[]; mine?: Vote['verdict'] }) {
   const { project: p, milestone: m } = item
   const votes = panel ?? m.panel
   const t = tally(votes)
@@ -19,7 +19,12 @@ export function ReviewRow({ item, now, panel }: { item: ReviewItem; now: number;
           {p.name} <span className="font-mono text-[12px] font-normal text-ink-3">M{m.n}</span>
         </p>
         <p className="truncate text-[13px] text-ink-2">
-          {m.title} <span className="text-ink-3">· proof {ago(m.proof!.submittedAt, now)}</span>
+          {m.title}{' '}
+          {mine ? (
+            <span className={mine === 'approve' ? 'text-proven' : 'text-default'}>· you {mine === 'approve' ? 'approved' : 'rejected'}</span>
+          ) : (
+            <span className="text-ink-3">· proof {ago(m.proof!.submittedAt, now)}</span>
+          )}
         </p>
       </div>
       <div className="flex shrink-0 flex-col items-end gap-1.5">

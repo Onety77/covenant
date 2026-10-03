@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { cn } from '@/lib/cn'
 import { seeded } from '@/lib/seeded'
 import { projects } from '@/data/projects'
@@ -54,6 +54,8 @@ interface Props {
  */
 export function TokenArt({ seed, src, size = 48, className }: Props) {
   const [failed, setFailed] = useState(false)
+  // unique per instance: the same token often appears twice on a page
+  const uid = useId()
   const style = { width: size, height: size, borderRadius: Math.max(6, Math.round(size * 0.22)) }
   if (src && !failed) {
     return <img src={src} alt="" width={size} height={size} onError={() => setFailed(true)} className={cn('shrink-0 object-cover', className)} style={style} />
@@ -65,7 +67,7 @@ export function TokenArt({ seed, src, size = 48, className }: Props) {
   const motif = motifs[idx >= 0 ? idx % motifs.length : Math.floor(r() * motifs.length)]
   const dark = r() > 0.6
   const fg = dark ? '#0a0b0d' : '#f7f7f2'
-  const id = `ta-${seed}`
+  const id = `ta${uid.replace(/:/g, '')}`
   return (
     <svg viewBox="0 0 100 100" width={size} height={size} className={cn('shrink-0 overflow-hidden', className)} style={style} aria-hidden>
       <defs>

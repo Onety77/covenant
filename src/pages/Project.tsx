@@ -69,7 +69,8 @@ export function ProjectPage() {
   ]
   const figures: [string, string][] = [
     ['Market cap', usd(m.mcapUsd)],
-    [m.stage === 'curve' ? 'Curve' : 'Liquidity', m.stage === 'curve' ? `${Math.round((m.curveSol / m.curveTargetSol) * 100)}%` : `${usd(m.liquidityUsd)} locked`],
+    [m.stage === 'curve' ? 'Curve' : 'Liquidity', m.stage === 'curve' ? `${Math.round((m.curveSol / m.curveTargetSol) * 100)}%` : usd(m.liquidityUsd)],
+    ['24h', change(m.change24h)],
     ['Vol 24h', usd(m.volume24hUsd)],
     ['Holders', count(m.holders)],
     ['Proven', `${provenCount(c)}/3`],
@@ -124,17 +125,17 @@ export function ProjectPage() {
           </div>
         </header>
 
-        <dl className="no-scrollbar -mx-4 mt-5 flex gap-7 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-          <div className="shrink-0 sm:hidden">
+        <dl className="mt-5 grid grid-cols-3 gap-x-4 gap-y-4 sm:flex sm:gap-7">
+          <div className="min-w-0 sm:hidden">
             <dt className="label">Price</dt>
-            <dd className={cn('mt-1 font-mono text-[15px] font-medium', m.change24h >= 0 ? 'text-proven' : 'text-default')}>
-              {price(m.priceUsd)} <span className="text-[12px]">{change(m.change24h)}</span>
+            <dd className={cn('mt-1 truncate font-mono text-[14px] font-medium', m.change24h >= 0 ? 'text-proven' : 'text-default')}>
+              {price(m.priceUsd)}
             </dd>
           </div>
           {figures.map(([k, v]) => (
-            <div key={k} className="shrink-0">
-              <dt className="label">{k}</dt>
-              <dd className="mt-1 font-mono text-[15px] font-medium">{v}</dd>
+            <div key={k} className={cn('min-w-0 sm:shrink-0', k === '24h' && 'sm:hidden', k === 'Vol 24h' && 'max-sm:hidden')}>
+              <dt className="label truncate">{k}</dt>
+              <dd className="mt-1 truncate font-mono text-[14px] font-medium sm:text-[15px]">{v}</dd>
             </div>
           ))}
         </dl>

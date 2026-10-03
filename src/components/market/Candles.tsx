@@ -35,14 +35,14 @@ export function Candles({ seed, last, change, className }: { seed: string; last:
             </g>
           )
         })}
-        <line x1="0" x2={W} y1={y(last)} y2={y(last)} stroke="var(--accent)" strokeDasharray="3 3" vectorEffect="non-scaling-stroke" />
+        <line x1="0" x2={W} y1={y(last)} y2={y(last)} stroke="var(--ink-3)" strokeDasharray="3 3" vectorEffect="non-scaling-stroke" />
       </svg>
       {ticks.filter((t) => Math.abs(y(t) - y(last)) > 16).map((t) => (
         <span key={t} className="absolute right-0 -translate-y-1/2 font-mono text-[10px] text-ink-4" style={{ top: `${(y(t) / H) * 100}%` }}>
           {price(t)}
         </span>
       ))}
-      <span className="absolute right-0 -translate-y-1/2 rounded-[4px] bg-accent px-1 font-mono text-[10px] font-medium text-on-accent" style={{ top: `${(y(last) / H) * 100}%` }}>
+      <span className="absolute right-0 -translate-y-1/2 rounded-[4px] bg-ink px-1 font-mono text-[10px] font-medium text-bg" style={{ top: `${(y(last) / H) * 100}%` }}>
         {price(last)}
       </span>
     </div>
