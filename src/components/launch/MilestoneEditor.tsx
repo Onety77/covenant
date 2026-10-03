@@ -18,7 +18,7 @@ export function MilestoneEditor({ n, value: m, start, errors, onChange }: Props)
     <fieldset className="rounded-[16px] bg-surface p-4 sm:p-5">
       <legend className="sr-only">Milestone {n}</legend>
       <div className="flex items-center gap-3">
-        <span className="grid size-8 place-items-center rounded-[7px] bg-accent font-mono text-[12px] font-medium text-on-accent">M{n}</span>
+        <span className="grid size-8 place-items-center rounded-[7px] bg-raised font-mono text-[12px] font-medium text-ink">M{n}</span>
         <p className="text-[13px] text-ink-3">Releases 5% of supply when proven</p>
       </div>
       <div className="mt-5 grid gap-4 sm:grid-cols-2">

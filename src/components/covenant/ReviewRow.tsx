@@ -21,7 +21,7 @@ export function ReviewRow({ item, now, panel, mine }: { item: ReviewItem; now: n
         <p className="truncate text-[13px] text-ink-2">
           {m.title}{' '}
           {mine ? (
-            <span className={mine === 'approve' ? 'text-proven' : 'text-default'}>· you {mine === 'approve' ? 'approved' : 'rejected'}</span>
+            <span className="text-ink">· you {mine === 'approve' ? 'approved' : 'rejected'}</span>
           ) : (
             <span className="text-ink-3">· proof {ago(m.proof!.submittedAt, now)}</span>
           )}

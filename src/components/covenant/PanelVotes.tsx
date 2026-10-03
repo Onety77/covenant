@@ -16,7 +16,7 @@ export function PanelVotes({ panel, now, className }: { panel: Vote[]; now: numb
               <p className="flex flex-wrap items-baseline gap-x-2 text-[13px]">
                 <span className="font-semibold">{who?.handle}</span>
                 {v.verifierId === me.id && <span className="text-ink-3">(you)</span>}
-                <span className={cn('font-mono text-[11px] uppercase', v.verdict === 'approve' ? 'text-proven' : v.verdict === 'reject' ? 'text-default' : 'text-ink-3')}>
+                <span className={cn('text-[12px]', v.verdict ? 'text-ink-2' : 'text-ink-3')}>
                   {v.verdict === 'approve' ? 'Approved' : v.verdict === 'reject' ? 'Rejected' : 'Reviewing'}
                 </span>
                 {v.at && <span className="ml-auto font-mono text-[11px] text-ink-4">{ago(v.at, now)}</span>}

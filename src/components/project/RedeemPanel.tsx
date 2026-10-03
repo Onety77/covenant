@@ -36,9 +36,9 @@ export function RedeemPanel({ project: p, now, onRedeem }: { project: Project; n
   }
 
   return (
-    <form onSubmit={submit} className="rounded-[16px] bg-surface p-4 shadow-[inset_0_2px_0_var(--default)]" id="redeem">
+    <form onSubmit={submit} className="rounded-[16px] bg-surface p-4" id="redeem">
       <p className="flex items-center justify-between">
-        <span className="label text-default">Redemption open</span>
+        <span className="label flex items-center gap-2"><span aria-hidden className="size-1.5 rounded-full bg-default" />Redemption open</span>
         <span className="font-mono text-[12px] text-ink-2 tabular">{closed ? 'Closed' : `closes in ${left(d.redemptionClosesAt, now)}`}</span>
       </p>
       <p className="mt-3 font-mono text-[34px] font-medium leading-none tracking-[-0.03em]">{sol(d.poolSol)}</p>
@@ -59,7 +59,7 @@ export function RedeemPanel({ project: p, now, onRedeem }: { project: Project; n
         <span className="flex justify-between">
           <span className="label">You burn</span>
           {address && (
-            <button type="button" onClick={() => setAmount(String(balance))} className="font-mono text-[11px] text-accent">
+            <button type="button" onClick={() => setAmount(String(balance))} className="font-mono text-[11px] text-ink-2">
               Max {count(balance)}
             </button>
           )}
@@ -84,7 +84,7 @@ export function RedeemPanel({ project: p, now, onRedeem }: { project: Project; n
         <span className="text-ink-3">You receive</span>
         <span className="font-mono tabular">{n ? sol(n * rate, 4) : '—'}</span>
       </p>
-      <Button type="submit" variant="danger" size="lg" className="mt-4 w-full disabled:opacity-100" disabled={closed || state === 'pending' || (Boolean(address) && !n)}>
+      <Button type="submit" variant={address ? 'danger' : 'primary'} size="lg" className="mt-4 w-full disabled:opacity-100" disabled={closed || state === 'pending' || (Boolean(address) && !n)}>
         {!address ? 'Connect wallet' : state === 'pending' ? 'Confirm in wallet…' : 'Burn and redeem'}
       </Button>
       <p className={cn('mt-3 text-[12px] leading-relaxed', state === 'done' ? 'text-proven' : state === 'error' ? 'text-default' : 'text-ink-3')} aria-live="polite">

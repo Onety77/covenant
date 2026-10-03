@@ -98,7 +98,7 @@ export function Verify() {
                         </p>
                         <p className="font-mono text-[11px] text-ink-3">{ago(r.milestone.decidedAt!, now)}</p>
                       </div>
-                      <span className={cn('font-mono text-[11px] uppercase', ok ? 'text-proven' : 'text-default')}>
+                      <span className="flex items-center gap-1.5 text-[12px] text-ink-2"><span aria-hidden className={cn('size-1.5 rounded-full', ok ? 'bg-proven' : 'bg-default')} />
                         {ok ? 'Approved' : 'Rejected'} {ok ? t.approve : t.reject}–{ok ? t.reject : t.approve}
                       </span>
                     </Link>

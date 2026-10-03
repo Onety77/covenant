@@ -24,7 +24,7 @@ export function Review() {
     return (
       <div className="wrap">
         <Notice title="This review isn’t open." body="It may have been decided already, or the link is wrong.">
-          <Link to="/verify" className="mt-4 text-sm font-semibold text-accent hover:underline">
+          <Link to="/verify" className="mt-4 text-sm font-semibold text-ink underline">
             Back to the queue
           </Link>
         </Notice>
@@ -68,7 +68,7 @@ export function Review() {
       <div className="mt-8 grid gap-10 lg:grid-cols-12 [&>*]:min-w-0">
         <div className="lg:col-span-8">
           {lateRisk && (
-            <p className="mb-8 rounded-[14px] bg-review-soft p-4 text-[14px] leading-relaxed">
+            <p className="mb-8 flex gap-3 rounded-[14px] bg-surface p-4 text-[14px] leading-relaxed"><span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-accent" />
               The milestone is due {date(due(p.covenant, m))}, before this review closes. Proof was sent in time, so it counts. Judge it as if the deadline hadn’t passed.
             </p>
           )}

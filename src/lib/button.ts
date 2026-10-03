@@ -4,7 +4,7 @@ export type Variant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'buy' | 'se
 export type Size = 'sm' | 'md' | 'lg'
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-ink text-bg hover-device:hover:bg-white',
+  primary: 'bg-accent-strong text-on-accent hover-device:hover:brightness-110',
   secondary: 'bg-raised text-ink hover-device:hover:bg-[#22262c]',
   ghost: 'text-ink-2 hover-device:hover:text-ink hover-device:hover:bg-hover',
   danger: 'bg-default text-on-default hover-device:hover:brightness-110',

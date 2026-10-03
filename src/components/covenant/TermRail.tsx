@@ -13,16 +13,7 @@ interface Props {
   className?: string
 }
 
-const verdictText = (m: Milestone) =>
-  m.status === 'proven'
-    ? 'text-proven'
-    : m.status === 'review'
-      ? 'text-review'
-      : m.status === 'missed' || m.status === 'rejected'
-        ? 'text-default'
-        : m.status === 'open'
-          ? 'text-accent'
-          : 'text-ink-3'
+const verdictText = (m: Milestone) => (m.status === 'locked' ? 'text-ink-3' : 'text-ink-2')
 
 /**
  * The covenant drawn as its 90-day term: three stretches ending in gates, and under them
@@ -54,7 +45,7 @@ export function TermRail({ covenant: c, now, stacked = false, className }: Props
             const share = fill(...bounds[i])
             const done = m.status === 'proven' || m.status === 'missed'
             const tone =
-              m.status === 'proven' ? 'bg-proven' : m.status === 'missed' || m.status === 'rejected' ? 'bg-default' : m.status === 'review' ? 'bg-review' : 'bg-accent'
+              m.status === 'proven' ? 'bg-proven' : m.status === 'missed' || m.status === 'rejected' ? 'bg-default' : m.status === 'review' ? 'bg-accent' : 'bg-ink-2'
             return (
               <div key={m.n} className="min-w-0">
                 <p className="flex min-w-0 items-baseline gap-1.5 pr-3">
@@ -92,7 +83,7 @@ export function TermRail({ covenant: c, now, stacked = false, className }: Props
                   key={m.n}
                   className={cn(
                     'flex min-w-0 items-center rounded-[4px] px-1.5',
-                    released ? 'bg-proven text-[#04140b]' : 'held bg-raised text-ink',
+                    released ? 'bg-ink text-bg' : 'held bg-raised text-ink',
                     lost && '[--held-c:rgb(255_77_77/0.7)]',
                   )}
                 >
@@ -112,7 +103,7 @@ export function TermRail({ covenant: c, now, stacked = false, className }: Props
           </div>
           <div className="relative h-6 overflow-hidden rounded-[4px] bg-raised">
             <div className="absolute inset-y-0 left-0 flex" style={{ width: at(Math.max(day, 2)) }}>
-              <div className="h-full bg-proven" style={{ width: `${(c.feesReleasedSol / Math.max(c.feesSol, 0.0001)) * 100}%` }} />
+              <div className="h-full bg-ink" style={{ width: `${(c.feesReleasedSol / Math.max(c.feesSol, 0.0001)) * 100}%` }} />
               <div className={cn('held h-full flex-1', broke && '[--held-c:rgb(255_77_77/0.7)]')} />
             </div>
           </div>
@@ -131,8 +122,8 @@ export function TermRail({ covenant: c, now, stacked = false, className }: Props
               </div>
             </div>
           ) : (
-            <div className={cn('flex h-6 items-center justify-end rounded-[4px] px-1.5', c.state === 'fulfilled' ? 'bg-proven' : 'held bg-raised')}>
-              <span className={cn('truncate rounded-[3px] px-1 font-mono text-[10px] font-medium', c.state === 'fulfilled' ? 'text-[#04140b]' : 'bg-[var(--rail-bg,var(--bg))]')}>
+            <div className={cn('flex h-6 items-center justify-end rounded-[4px] px-1.5', c.state === 'fulfilled' ? 'bg-ink' : 'held bg-raised')}>
+              <span className={cn('truncate rounded-[3px] px-1 font-mono text-[10px] font-medium', c.state === 'fulfilled' ? 'text-bg' : 'bg-[var(--rail-bg,var(--bg))]')}>
                 {c.state === 'fulfilled' ? 'Returned' : `Held to day ${TERM_DAYS}`}
               </span>
             </div>
@@ -149,7 +140,7 @@ function Gate({ m }: { m: Milestone }) {
     m.status === 'proven'
       ? 'bg-proven text-[#04140b]'
       : m.status === 'review'
-        ? 'bg-review text-[#0b0e24]'
+        ? 'bg-accent text-on-accent'
         : m.status === 'missed' || m.status === 'rejected'
           ? 'bg-default text-on-default'
           : 'bg-raised text-ink-3 ring-1 ring-line-2'

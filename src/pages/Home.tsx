@@ -12,7 +12,7 @@ import { BOND_SOL, ESCROW_PCT, NEEDED, PANEL, TERM_DAYS } from '@/lib/rules'
 import { Button } from '@/components/ui/Button'
 import { Notice } from '@/components/ui/Notice'
 import { Tabs } from '@/components/ui/Tabs'
-import { Spotlight } from '@/components/board/Spotlight'
+import { LiveCovenant } from '@/components/board/LiveCovenant'
 import { Ticker } from '@/components/board/Ticker'
 import { TokenItem, TokenItemSkeleton } from '@/components/board/TokenItem'
 
@@ -51,54 +51,54 @@ export function Home() {
     return out
   }, [])
 
-  const list = useMemo(() => {
-    const term = q.trim().toLowerCase()
-    const rows = state === 'empty' ? [] : projects.filter((p) => (filter === 'all' || standing(p) === filter) && (!term || `${p.name} ${p.ticker} ${p.tagline}`.toLowerCase().includes(term)))
-    const nextDue = (p: (typeof projects)[number]) => {
-      const m = p.covenant.milestones.find((x) => x.status !== 'proven')
-      return p.covenant.state === 'active' && m ? Date.parse(p.covenant.startedAt) + m.dueDay * 864e5 : Infinity
-    }
-    return [...rows].sort((a, b) => (sort === 'mcap' ? b.market.mcapUsd - a.market.mcapUsd : sort === 'new' ? Date.parse(b.launchedAt) - Date.parse(a.launchedAt) : nextDue(a) - nextDue(b)))
-  }, [filter, sort, q, state])
+  // cheap enough to recompute on every render
+  const term = q.trim().toLowerCase()
+  const rows = state === 'empty' ? [] : projects.filter((p) => (filter === 'all' || standing(p) === filter) && (!term || `${p.name} ${p.ticker} ${p.tagline}`.toLowerCase().includes(term)))
+  const nextDue = (p: (typeof projects)[number]) => {
+    const m = p.covenant.milestones.find((x) => x.status !== 'proven')
+    return p.covenant.state === 'active' && m ? Date.parse(p.covenant.startedAt) + m.dueDay * 864e5 : Infinity
+  }
+  const list = [...rows].sort((a, b) => (sort === 'mcap' ? b.market.mcapUsd - a.market.mcapUsd : sort === 'new' ? Date.parse(b.launchedAt) - Date.parse(a.launchedAt) : nextDue(a) - nextDue(b)))
+
 
   return (
     <>
-      <Ticker items={activity} now={now} />
-
-      <section className="wrap grid gap-6 pt-7 pb-6 sm:gap-8 sm:pb-8 lg:grid-cols-12 lg:items-end lg:gap-12 lg:pt-14 lg:pb-14 [&>*]:min-w-0">
-        <div className="lg:col-span-7">
-          <h1 className="text-display">Launch with something at&nbsp;stake.</h1>
-          <p className="mt-4 max-w-lg text-[15px] leading-relaxed text-ink-2 sm:text-[17px]">
-            Every token here comes with a bonded roadmap. Builders who deliver get paid. Builders who don’t pay their holders.
+      <section className="wrap grid gap-12 pt-10 pb-12 lg:grid-cols-12 lg:items-center lg:gap-14 lg:pt-20 lg:pb-20 [&>*]:min-w-0">
+        <div className="lg:col-span-5">
+          <p className="inline-flex items-center gap-2 rounded-full bg-raised py-1 pr-3 pl-2.5 text-[12px] text-ink-2">
+            <span aria-hidden className="size-1.5 rounded-full bg-accent" />
+            {stats.live} covenants live on Solana
           </p>
-          <div className="mt-6 flex gap-2">
-            <Button variant="primary" size="lg" to="/launch" className="max-sm:h-11 max-sm:flex-1">
+          <h1 className="mt-5 text-display">Launch with something at&nbsp;stake.</h1>
+          <p className="mt-5 max-w-md text-[16px] leading-relaxed text-ink-2 sm:text-[17px]">
+            Every token on Covenant ships with a bonded roadmap. Builders who deliver get paid. Builders who don’t pay their holders.
+          </p>
+          <div className="mt-8 flex gap-2">
+            <Button variant="primary" size="lg" to="/launch" className="max-sm:flex-1">
               Launch a token
             </Button>
-            <Button size="lg" to="/rules" className="max-sm:h-11 max-sm:flex-1">
-              How it works
+            <Button size="lg" to="#board" className="max-sm:flex-1">
+              Explore tokens
             </Button>
           </div>
+          <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-1.5 font-mono text-[12px] text-ink-3">
+            <li className="whitespace-nowrap">
+              <span className="text-ink">{sol(stats.atStake, 0)}</span> at stake
+            </li>
+            <li className="whitespace-nowrap">
+              <span className="text-ink">{sol(stats.toHolders, 0)}</span> paid to holders
+            </li>
+            <li className="whitespace-nowrap">
+              <span className="text-ink">{stats.proven}</span> milestones proven
+            </li>
+          </ul>
         </div>
-        <dl className="grid grid-cols-2 border-line max-lg:border-t lg:col-span-5 lg:border-l lg:pl-12">
-          {[
-            ['At stake now', sol(stats.atStake, 0), 'bonds and unreleased fees'],
-            ['Paid to holders', sol(stats.toHolders, 0), 'from defaulted covenants'],
-            ['Live covenants', String(stats.live), `of ${projects.length} launches`],
-            ['Milestones proven', String(stats.proven), 'by verifier panels'],
-          ].map(([k, v, note], i) => (
-            <div key={k} className={cn('min-w-0 py-3 sm:py-4 lg:py-5', i % 2 === 1 && 'pl-5 lg:pl-8', i < 2 && 'border-b border-line')}>
-              <dt className="label">{k}</dt>
-              <dd className="mt-1 truncate font-mono text-[18px] font-medium tracking-[-0.02em] sm:mt-1.5 sm:text-[26px]">{v}</dd>
-              <dd className="mt-0.5 truncate text-[12px] text-ink-3 max-sm:hidden">{note}</dd>
-            </div>
-          ))}
-        </dl>
+        <LiveCovenant project={getProject('lantern')!} now={now} className="lg:col-span-7" />
       </section>
 
-      <Spotlight project={getProject('lantern')!} now={now} />
+      <Ticker items={activity} now={now} />
 
-      <section id="board" aria-labelledby="board-title" className="wrap scroll-mt-16 pt-10 pb-16 lg:pt-14">
+      <section id="board" aria-labelledby="board-title" className="wrap scroll-mt-16 pt-10 pb-16 lg:pt-12">
         <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-4">
           <h2 id="board-title" className="text-h2">
             {q ? `Results for “${q}”` : 'The board'}
@@ -148,7 +148,7 @@ export function Home() {
             <h2 id="how" className="text-h2">
               How a covenant works
             </h2>
-            <Link to="/rules" className="inline-flex items-center gap-1 text-[14px] font-semibold text-accent hover-device:hover:underline">
+            <Link to="/rules" className="inline-flex items-center gap-1 text-[14px] font-semibold text-ink-2 hover-device:hover:text-ink">
               Read the rules <ArrowRight className="size-4" />
             </Link>
           </div>
@@ -156,7 +156,7 @@ export function Home() {
             {steps.map(([t, b], i) => (
               <li key={t}>
                 <div className="flex items-center gap-2">
-                  <span className={cn('grid size-6 place-items-center rounded-[6px] font-mono text-[11px] font-medium', i === 3 ? 'bg-accent text-on-accent' : 'bg-raised text-ink-2')}>{i + 1}</span>
+                  <span className={cn('grid size-6 place-items-center rounded-[6px] font-mono text-[11px] font-medium', 'bg-raised text-ink-2')}>{i + 1}</span>
                   <span aria-hidden className="h-px flex-1 bg-line-2 max-lg:hidden" />
                 </div>
                 <p className="mt-4 font-display text-[17px] font-semibold tracking-[-0.03em]">{t}</p>

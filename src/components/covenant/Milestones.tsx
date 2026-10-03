@@ -18,10 +18,10 @@ interface Props {
   className?: string
 }
 
-const textTone = { proven: 'text-proven', review: 'text-review', default: 'text-default', accent: 'text-accent', 'ink-3': 'text-ink-3' } as const
+const textTone = { proven: 'text-ink-2', review: 'text-ink-2', default: 'text-ink-2', open: 'text-ink-2', 'ink-3': 'text-ink-3' } as const
 
 const tone = (m: Milestone): keyof typeof textTone =>
-  m.status === 'proven' ? 'proven' : m.status === 'review' ? 'review' : m.status === 'missed' || m.status === 'rejected' ? 'default' : m.status === 'open' ? 'accent' : 'ink-3'
+  m.status === 'proven' ? 'proven' : m.status === 'review' ? 'review' : m.status === 'missed' || m.status === 'rejected' ? 'default' : m.status === 'open' ? 'open' : 'ink-3'
 
 /**
  * The three milestones as a timeline: each one's test, deadline and what it releases,
@@ -54,9 +54,9 @@ function Item({ c, m, now, last, href }: { c: Covenant; m: Milestone; now: numbe
         className={cn(
           'relative grid size-7 place-items-center rounded-[7px] font-mono text-[11px] font-medium',
           k === 'proven' && 'bg-proven text-[#04140b]',
-          k === 'review' && 'bg-review text-[#0b0e24]',
+          k === 'review' && 'bg-accent text-on-accent',
           k === 'default' && 'bg-default text-on-default',
-          k === 'accent' && 'bg-accent text-on-accent',
+          k === 'open' && 'bg-raised text-ink ring-1 ring-line-2',
           k === 'ink-3' && 'bg-raised text-ink-3',
         )}
       >
@@ -109,7 +109,7 @@ function Item({ c, m, now, last, href }: { c: Covenant; m: Milestone; now: numbe
                 <ChevronDown className={cn('size-4 transition-transform', votesOpen && 'rotate-180')} />
               </button>
               {href && (
-                <Link to={href} className="text-[13px] font-semibold text-accent hover-device:hover:underline sm:ml-auto">
+                <Link to={href} className="text-[13px] font-semibold text-ink underline decoration-line-2 underline-offset-4 hover-device:hover:decoration-ink sm:ml-auto">
                   Review as verifier
                 </Link>
               )}
@@ -119,7 +119,7 @@ function Item({ c, m, now, last, href }: { c: Covenant; m: Milestone; now: numbe
         )}
 
         {m.status === 'open' && <p className="mt-4 text-[13px] text-ink-3">Waiting for proof. If none is approved by {date(dueIso)}, the covenant defaults.</p>}
-        {m.status === 'missed' && <p className="mt-4 text-[13px] font-medium text-default">No approved proof by day {m.dueDay}. The covenant defaulted.</p>}
+        {m.status === 'missed' && <p className="mt-4 text-[13px] text-ink-2">No approved proof by day {m.dueDay}. The covenant defaulted.</p>}
 
         {m.attempts && m.attempts.length > 0 && (
           <div className="mt-4">
@@ -129,7 +129,7 @@ function Item({ c, m, now, last, href }: { c: Covenant; m: Milestone; now: numbe
             </button>
             {attemptsOpen &&
               m.attempts.map((a) => (
-                <div key={a.decidedAt} className="mt-3 border-l-2 border-default/40 pl-4">
+                <div key={a.decidedAt} className="mt-3 border-l-2 border-line-2 pl-4">
                   <ProofBlock proof={a.proof} now={now} />
                   <PanelVotes panel={a.panel} now={now} className="mt-4" />
                 </div>
@@ -146,7 +146,7 @@ function ProofBlock({ proof, now, late }: { proof: Proof; now: number; late?: bo
     <div className="mt-4 rounded-[12px] bg-surface p-4">
       <p className="label">
         Proof · {ago(proof.submittedAt, now)}
-        {late && <span className="text-default"> · after the deadline</span>}
+        {late && <span className="text-ink"> · after the deadline</span>}
       </p>
       <p className="mt-2 text-[14px] leading-relaxed">{proof.summary}</p>
       <div className="mt-3 flex flex-wrap gap-2">
@@ -160,7 +160,7 @@ function ProofBlock({ proof, now, late }: { proof: Proof; now: number; late?: bo
       <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1">
         {proof.links.map((l) => (
           <li key={l.label}>
-            <a href={l.href} className="inline-flex items-center gap-1 text-[13px] font-medium text-accent hover-device:hover:underline">
+            <a href={l.href} className="inline-flex items-center gap-1 text-[13px] font-medium text-ink-2 hover-device:hover:text-ink">
               {l.label} <ArrowUpRight className="size-3" />
             </a>
           </li>

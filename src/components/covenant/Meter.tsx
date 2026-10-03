@@ -14,7 +14,7 @@ export function Meter({ covenant: c, now, className }: { covenant: Covenant; now
         const a = i ? c.milestones[i - 1].dueDay : 0
         const share = Math.max(0, Math.min(1, (day - a) / (m.dueDay - a)))
         const fill =
-          m.status === 'proven' ? 'bg-proven' : m.status === 'missed' || m.status === 'rejected' ? 'bg-default' : m.status === 'review' ? 'bg-review' : 'bg-accent'
+          m.status === 'proven' ? 'bg-proven' : m.status === 'missed' || m.status === 'rejected' ? 'bg-default' : m.status === 'review' ? 'bg-accent' : 'bg-ink-2'
         const full = m.status === 'proven' || m.status === 'missed' || m.status === 'rejected'
         return (
           <div key={m.n} className="relative h-full overflow-hidden rounded-full bg-line-2" style={{ flex: m.dueDay - a }}>

@@ -65,15 +65,15 @@ export function TokenArt({ seed, src, size = 48, className }: Props) {
   const hue = idx >= 0 ? Math.round((idx * 137.5 + 20) % 360) : Math.floor(r() * 360)
   const hue2 = (hue + 30 + Math.floor(r() * 60)) % 360
   const motif = motifs[idx >= 0 ? idx % motifs.length : Math.floor(r() * motifs.length)]
-  const dark = r() > 0.6
-  const fg = dark ? '#0a0b0d' : '#f7f7f2'
+  // muted duotones: distinct enough to recognise, calm enough to sit in a neutral UI
+  const fg = 'rgb(255 255 255 / 0.88)'
   const id = `ta${uid.replace(/:/g, '')}`
   return (
     <svg viewBox="0 0 100 100" width={size} height={size} className={cn('shrink-0 overflow-hidden', className)} style={style} aria-hidden>
       <defs>
         <linearGradient id={id} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor={`oklch(${dark ? 0.82 : 0.6} 0.17 ${hue})`} />
-          <stop offset="1" stopColor={`oklch(${dark ? 0.72 : 0.45} 0.17 ${hue2})`} />
+          <stop offset="0" stopColor={`oklch(0.42 0.07 ${hue})`} />
+          <stop offset="1" stopColor={`oklch(0.3 0.06 ${hue2})`} />
         </linearGradient>
         <clipPath id={`${id}-c`}>
           <rect width="100" height="100" />

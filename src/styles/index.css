@@ -2,42 +2,43 @@
 
 /*
   Covenant: a launchpad where the roadmap is bonded.
-  One dark world. Near-black ground, white for actions, and one brand violet that marks
-  what a builder has put up (held value is drawn in violet stripes). Verdict colours
-  (proven green, review amber, default red) carry state and never double as the brand.
-  Released value is solid green, forfeited value red.
-  Layout rule: separate things with space and tone, not boxes. Panels only where
-  something is operated (trade, redeem, verdict).
+
+  Colour rules (researched against Linear, Hyperliquid, Phantom, Jupiter and Meteora's own
+  launchpad template, which all run near-black canvases with one signature colour):
+  - Neutrals carry ~90% of every screen: the ground, three surface steps, four inks.
+  - One brand colour marks what's under a covenant and nothing else: held stake (stripes),
+    the milestone awaiting a verdict, the primary action, the mark.
+  - Green and red mean money and verdicts only: price up/down, candles, buy/sell, a proven
+    or defaulted milestone. Always a small mark beside neutral text, never the text itself.
+  - No other hues. Text always wears an ink.
 */
 
 @custom-variant hover-device (@media (hover: hover));
 
 :root {
   color-scheme: dark;
-  --bg: #0a0b0d;
-  --surface: #121418;
-  --raised: #1a1d22;
-  --hover: rgb(255 255 255 / 0.04);
-  --line: rgb(255 255 255 / 0.07);
-  --line-2: rgb(255 255 255 / 0.13);
+  --bg: #08090b;
+  --surface: #101215;
+  --raised: #171a1e;
+  --hover: rgb(255 255 255 / 0.035);
+  --line: rgb(255 255 255 / 0.065);
+  --line-2: rgb(255 255 255 / 0.12);
 
-  --ink: #f2f3f0;
-  --ink-2: rgb(242 243 240 / 0.68);
-  --ink-3: rgb(242 243 240 / 0.46);
-  --ink-4: rgb(242 243 240 / 0.26);
+  --ink: #ededea;
+  --ink-2: rgb(237 237 234 / 0.66);
+  --ink-3: rgb(237 237 234 / 0.44);
+  --ink-4: rgb(237 237 234 / 0.24);
 
-  /* the brand: what a builder has put up. Held stripes, links, the mark. Never a button fill. */
-  --accent: #8f80ff;
-  --accent-soft: rgb(143 128 255 / 0.14);
-  --on-accent: #0c0921;
+  --accent: #8f80ff;          /* marks: held stripes, the pending verdict, the logo */
+  --accent-strong: #6f5ff7;   /* fills: the primary button (white text passes AA) */
+  --accent-soft: rgb(143 128 255 / 0.12);
+  --on-accent: #ffffff;
 
-  --proven: #3ddc84;
-  --proven-soft: rgb(61 220 132 / 0.12);
-  --review: #f2b544;
-  --review-soft: rgb(242 181 68 / 0.13);
-  --default: #ff4d4d;
-  --default-soft: rgb(255 77 77 / 0.12);
-  --on-default: #160303;
+  --proven: #34d07f;
+  --proven-soft: rgb(52 208 127 / 0.1);
+  --default: #f0544f;
+  --default-soft: rgb(240 84 79 / 0.1);
+  --on-default: #ffffff;
 
   --overlay: rgb(0 0 0 / 0.7);
 }
@@ -54,12 +55,11 @@
   --color-ink-3: var(--ink-3);
   --color-ink-4: var(--ink-4);
   --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
   --color-accent-soft: var(--accent-soft);
   --color-on-accent: var(--on-accent);
   --color-proven: var(--proven);
   --color-proven-soft: var(--proven-soft);
-  --color-review: var(--review);
-  --color-review-soft: var(--review-soft);
   --color-default: var(--default);
   --color-default-soft: var(--default-soft);
   --color-on-default: var(--on-default);
@@ -107,7 +107,8 @@
 
 /* value held under a covenant: stripes in the brand colour */
 @utility held {
-  background-image: repeating-linear-gradient(-45deg, var(--held-c, rgb(143 128 255 / 0.8)) 0 2px, transparent 2px 6px);
+  --held-default: color-mix(in srgb, var(--accent) 55%, transparent);
+  background-image: repeating-linear-gradient(-45deg, var(--held-c, var(--held-default)) 0 2px, transparent 2px 6px);
 }
 @utility no-scrollbar {
   scrollbar-width: none;

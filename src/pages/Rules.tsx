@@ -108,7 +108,7 @@ export function Rules() {
           {rules.map((r, i) => (
             <section key={r.id} id={r.id} aria-labelledby={`${r.id}-t`} className="scroll-mt-24 pb-10">
               <h2 id={`${r.id}-t`} className="flex items-baseline gap-3 text-h2">
-                <span className="font-mono text-[14px] font-normal text-accent">{i + 1}</span>
+                <span className="font-mono text-[14px] font-normal text-ink-4">{i + 1}</span>
                 {r.title}
               </h2>
               <div className="mt-3 grid max-w-2xl gap-3 text-[15px] leading-relaxed text-ink-2">{r.body}</div>

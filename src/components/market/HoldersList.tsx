@@ -17,7 +17,7 @@ export function HoldersList({ project }: { project: Project }) {
               {h.label && <span className="font-mono text-[10px] text-ink-3 uppercase">{h.label}</span>}
             </p>
             <div className="mt-1.5 h-1 rounded-full bg-raised">
-              <div className={cn('h-full rounded-full', h.label === 'locked' ? 'bg-accent' : h.label ? 'bg-ink-3' : 'bg-ink-4')} style={{ width: `${(h.pct / max) * 100}%` }} />
+              <div className={cn('h-full rounded-full', h.label === 'locked' ? 'held bg-raised' : h.label ? 'bg-ink-3' : 'bg-ink-4')} style={{ width: `${(h.pct / max) * 100}%` }} />
             </div>
           </div>
           <span className="text-right font-mono tabular">{(h.pct * 100).toFixed(2)}%</span>

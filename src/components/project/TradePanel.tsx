@@ -48,7 +48,7 @@ export function TradePanel({ project: p, side: initial = 'buy', onTrade }: { pro
             }}
             className={cn(
               'h-9 rounded-[8px] text-[14px] font-semibold capitalize transition-colors',
-              side === s ? (s === 'buy' ? 'bg-proven text-[#04140b]' : 'bg-default text-on-default') : 'text-ink-3 hover-device:hover:text-ink',
+              side === s ? 'bg-raised text-ink' : 'text-ink-3 hover-device:hover:text-ink',
             )}
           >
             {s}
@@ -89,7 +89,7 @@ export function TradePanel({ project: p, side: initial = 'buy', onTrade }: { pro
         <span className="text-ink-3">You get about</span>
         <span className="font-mono tabular">{n ? (side === 'buy' ? `${count(Math.round(out))} ${p.ticker}` : sol(out, 3)) : '—'}</span>
       </p>
-      <Button type="submit" variant={side === 'buy' ? 'buy' : 'sell'} size="lg" className="mt-4 w-full disabled:opacity-100" disabled={state === 'pending' || (Boolean(address) && !n)}>
+      <Button type="submit" variant={!address ? 'primary' : side === 'buy' ? 'buy' : 'sell'} size="lg" className="mt-4 w-full disabled:opacity-100" disabled={state === 'pending' || (Boolean(address) && !n)}>
         {!address ? 'Connect wallet' : state === 'pending' ? 'Confirm in wallet…' : `${side === 'buy' ? 'Buy' : 'Sell'} $${p.ticker}`}
       </Button>
       <p className={cn('mt-3 text-[12px] leading-relaxed', state === 'done' ? 'text-proven' : state === 'error' ? 'text-default' : 'text-ink-3')} aria-live="polite">

@@ -37,10 +37,10 @@ export function Defaults() {
             const c = p.covenant
             const d = c.default!
             return (
-              <article key={p.id} className="bg-default-soft">
+              <article key={p.id} className="bg-surface">
                 <div className="wrap grid gap-8 py-8 lg:grid-cols-12 lg:items-center [&>*]:min-w-0">
                   <div className="lg:col-span-7">
-                    <p className="font-mono text-[11px] text-default uppercase">Redemption open</p>
+                    <p className="flex items-center gap-2 text-[13px] text-ink-2"><span aria-hidden className="size-1.5 rounded-full bg-default" />Redemption open</p>
                     <div className="mt-4 flex items-center gap-3.5">
                       <TokenArt seed={p.ticker} size={56} />
                       <div className="min-w-0">
@@ -67,7 +67,7 @@ export function Defaults() {
                   </div>
                   <div className="lg:col-span-5">
                     <p className="label">Window closes in</p>
-                    <p className="mt-1 font-mono text-[40px] leading-none font-medium tracking-[-0.04em] text-default">{left(d.redemptionClosesAt, now)}</p>
+                    <p className="mt-1 font-mono text-[40px] leading-none font-medium tracking-[-0.04em]">{left(d.redemptionClosesAt, now)}</p>
                     <p className="mt-3 text-[13px] leading-relaxed text-ink-2">
                       {count(Math.round((SUPPLY * (1 - ESCROW_PCT / 100) * (1 - d.redeemedPct)) / 1e6))}M ${p.ticker} not yet redeemed. Every token pays the same rate, whenever it’s burned.
                     </p>

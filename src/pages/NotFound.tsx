@@ -5,7 +5,7 @@ export function NotFound() {
   return (
     <div className="wrap flex flex-col items-start pt-16 pb-28 lg:pt-24">
       <div aria-hidden className="flex w-full max-w-sm items-center gap-1">
-        <div className="h-1.5 flex-[3] rounded-l-full bg-accent" />
+        <div className="h-1.5 flex-[3] rounded-l-full bg-ink-2" />
         <div className="h-1.5 flex-[2] bg-line-2" />
         <div className="held h-6 flex-[2] rounded-[4px] bg-raised" />
         <span className="grid size-5 place-items-center rounded-[5px] bg-default font-mono text-[11px] font-bold text-on-default">?</span>

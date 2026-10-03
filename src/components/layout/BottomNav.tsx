@@ -11,7 +11,7 @@ export function BottomNav() {
           <li key={to}>
             <NavLink to={to} end={to === '/'} className={({ isActive }) => cn('flex h-full flex-col items-center justify-center gap-1 text-[11px] font-medium', isActive ? 'text-ink' : 'text-ink-3')}>
               {to === '/launch' ? (
-                <span className="grid size-10 place-items-center rounded-[12px] bg-ink text-bg">
+                <span className="grid size-10 place-items-center rounded-[12px] bg-accent-strong text-on-accent">
                   <Icon className="size-5" strokeWidth={2.5} />
                 </span>
               ) : (

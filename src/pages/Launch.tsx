@@ -88,9 +88,9 @@ export function Launch() {
     return (
       <div className="wrap pt-10 pb-28 lg:py-20">
         <div className="max-w-2xl">
-          <p className="font-mono text-[12px] text-proven uppercase">Covenant signed</p>
+          <p className="flex items-center gap-2 text-[13px] text-ink-2"><span aria-hidden className="size-1.5 rounded-full bg-proven" />Covenant signed</p>
           <h1 className="mt-3 text-h1">
-            ${d.ticker} is live. <span className="text-accent">Day 0 of 90.</span>
+            ${d.ticker} is live. <span className="text-ink-3">Day 0 of 90.</span>
           </h1>
           <p className="mt-4 text-[16px] leading-relaxed text-ink-2">
             Your {BOND_SOL} SOL bond and {ESCROW_PCT}% of supply are held under the covenant, and every creator fee from here on is pledged to it. M1 is due on day {d.milestones[0].dueDay}.
@@ -138,7 +138,7 @@ export function Launch() {
       <div className="wrap pt-6 pb-28 lg:pt-12 lg:pb-16">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <h1 className="text-h1">Launch a token</h1>
-          <button type="button" onClick={() => setD(example)} className="text-[13px] font-semibold text-accent hover-device:hover:underline">
+          <button type="button" onClick={() => setD(example)} className="text-[13px] font-semibold text-ink-2 underline decoration-line-2 underline-offset-4 hover-device:hover:text-ink">
             Fill with an example
           </button>
         </div>
@@ -153,7 +153,7 @@ export function Launch() {
                 aria-current={i === step ? 'step' : undefined}
                 className="group w-full text-left disabled:cursor-default"
               >
-                <span className={cn('block h-1 rounded-full', i < step ? 'bg-ink-2' : i === step ? 'bg-accent' : 'bg-line-2')} />
+                <span className={cn('block h-1 rounded-full', i <= step ? 'bg-ink' : 'bg-line-2')} />
                 <span className={cn('mt-2 flex items-center gap-1.5 text-[13px] font-medium', i === step ? 'text-ink' : 'text-ink-3')}>
                   {i < step ? <Check className="size-3.5" strokeWidth={3} /> : <span className="font-mono text-[11px]">{i + 1}</span>}
                   <span className="max-sm:sr-only">{s}</span>
@@ -237,7 +237,7 @@ export function Launch() {
                   [`${ESCROW_PCT}% of supply in escrow`, `Your allocation unlocks 5% per proven milestone. Unproven shares pass to a replacement builder after a default.`],
                   ['Every creator fee', 'Your share of trading fees goes into the covenant and is released with your milestones. On a default, unreleased fees go to holders.'],
                 ].map(([t, b], i) => (
-                  <label key={t} className={cn('flex cursor-pointer gap-4 rounded-[14px] bg-surface p-4 ring-1 transition-shadow sm:p-5', acks[i] ? 'ring-accent' : 'ring-transparent', tried && !acks[i] && 'ring-default')}>
+                  <label key={t} className={cn('flex cursor-pointer gap-4 rounded-[14px] bg-surface p-4 ring-1 transition-shadow sm:p-5', acks[i] ? 'ring-ink-3' : 'ring-transparent', tried && !acks[i] && 'ring-default')}>
                     <span aria-hidden className="held mt-0.5 h-10 w-12 shrink-0 rounded-[5px] bg-raised" />
                     <span className="min-w-0 flex-1">
                       <span className="block text-[16px] font-semibold">{t}</span>
@@ -265,7 +265,7 @@ export function Launch() {
                     </div>
                   ))}
                 </dl>
-                <label className={cn('flex items-start gap-3 rounded-[14px] bg-default-soft p-4 text-[14px] leading-relaxed ring-1 sm:p-5', tried && !final ? 'ring-default' : 'ring-transparent')}>
+                <label className={cn('flex items-start gap-3 rounded-[14px] bg-surface p-4 text-[14px] leading-relaxed ring-1 sm:p-5', tried && !final ? 'ring-default' : 'ring-transparent')}>
                   <input type="checkbox" checked={final} onChange={(e) => setFinal(e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-[var(--default)]" />
                   If a deadline passes without approved proof, the covenant defaults on its own. I lose what’s still held, and nobody, including me, can stop it.
                 </label>

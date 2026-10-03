@@ -11,12 +11,13 @@ export const statusLabel: Record<MilestoneStatus, string> = {
   missed: 'Missed',
 }
 
-export type Tone = 'neutral' | 'accent' | 'proven' | 'review' | 'default'
+/** proven and default are verdicts (green, red); accent marks what awaits one; the rest is neutral */
+export type Tone = 'neutral' | 'accent' | 'proven' | 'default'
 
 export const statusTone: Record<MilestoneStatus, Tone> = {
   locked: 'neutral',
-  open: 'accent',
-  review: 'review',
+  open: 'neutral',
+  review: 'accent',
   proven: 'proven',
   rejected: 'default',
   missed: 'default',
@@ -30,7 +31,7 @@ export const covenantLabel: Record<Covenant['state'], string> = {
 }
 
 export const covenantTone: Record<Covenant['state'], Tone> = {
-  active: 'accent',
+  active: 'neutral',
   fulfilled: 'proven',
   defaulted: 'default',
   succeeded: 'neutral',

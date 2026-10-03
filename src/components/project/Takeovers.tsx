@@ -31,7 +31,7 @@ export function Takeovers({ project: p, now, onOffer }: Props) {
           <li key={o.id} className="rounded-[14px] bg-surface p-4 sm:p-5">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <p className="text-[15px] font-semibold">{o.builder.handle}</p>
-              {o.mine && <span className="rounded-[5px] bg-accent-soft px-1.5 py-0.5 font-mono text-[11px] text-accent uppercase">Your offer</span>}
+              {o.mine && <span className="rounded-[5px] bg-raised px-1.5 py-0.5 text-[11px] text-ink-2">Your offer</span>}
               <span className="font-mono text-[11px] text-ink-3">{o.builder.wallet}</span>
               <span className="ml-auto inline-flex items-center gap-2 text-[12px] text-ink-2">
                 <span aria-hidden className="held h-3.5 w-5 rounded-[3px] bg-raised" /> {o.bondSol} SOL bond posted

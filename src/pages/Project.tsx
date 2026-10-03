@@ -48,7 +48,7 @@ export function ProjectPage() {
     return (
       <div className="wrap">
         <Notice title="There’s no token here." body="The link may be wrong, or the launch never happened.">
-          <Link to="/" className="mt-4 text-sm font-semibold text-accent hover:underline">
+          <Link to="/" className="mt-4 text-sm font-semibold text-ink underline">
             Back to the board
           </Link>
         </Notice>
@@ -145,8 +145,8 @@ export function ProjectPage() {
             <Candles seed={p.id} last={m.priceUsd} change={m.change24h} className="h-56 sm:h-72 lg:h-80" />
 
             {defaulted && c.default && (
-              <div role="status" className="mt-8 rounded-[14px] bg-default-soft p-4 sm:p-5">
-                <p className="font-mono text-[11px] text-default uppercase">Defaulted · {date(c.default.at)}</p>
+              <div role="status" className="mt-8 rounded-[14px] bg-surface p-4 sm:p-5">
+                <p className="flex items-center gap-2 text-[13px] text-ink-2"><span aria-hidden className="size-1.5 rounded-full bg-default" />Defaulted · {date(c.default.at)}</p>
                 <p className="mt-2 text-[16px] leading-snug font-semibold">
                   {c.builder.handle} {c.default.reason === 'missed' ? 'missed' : 'failed to prove'} M{c.default.milestone}, “{c.milestones[c.default.milestone - 1].title}”.
                 </p>
