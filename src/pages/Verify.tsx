@@ -24,7 +24,7 @@ export function Verify() {
   const decided = decidedReviews().slice(0, 8)
 
   return (
-    <div className="wrap pt-8 pb-24 lg:pt-12 lg:pb-16">
+    <div className="wrap pt-8 pb-16 lg:pt-12">
       <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
         <div className="lg:col-span-7">
           <h1 className="text-h1">Verify</h1>

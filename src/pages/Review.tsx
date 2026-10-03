@@ -43,7 +43,7 @@ export function Review() {
   const covenant = { ...p.covenant, milestones: p.covenant.milestones.map((x) => (x.n === m.n ? { ...m, panel } : x)) }
 
   return (
-    <div className="wrap pt-5 pb-24 lg:pt-8 lg:pb-16">
+    <div className="wrap pt-5 pb-16 lg:pt-8">
       <Link to="/verify" className="inline-flex items-center gap-1 text-[13px] font-medium text-ink-3 hover-device:hover:text-ink">
         <ChevronLeft className="size-4" /> Verify
       </Link>

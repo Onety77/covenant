@@ -13,7 +13,6 @@ import { AnimatePresence, m } from 'motion/react'
 import { EASE_OUT, SPRING_SOFT } from '@/lib/motion'
 import { CountUp } from '@/components/motion/CountUp'
 import { MaskLine } from '@/components/motion/MaskLine'
-import { Item, Stagger } from '@/components/motion/Reveal'
 import { Button } from '@/components/ui/Button'
 import { Notice } from '@/components/ui/Notice'
 import { Tabs } from '@/components/ui/Tabs'
@@ -182,18 +181,18 @@ export function Home() {
               Read the rules <ArrowRight className="size-4" />
             </Link>
           </div>
-          <Stagger as="ol" className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+          <ol className="mt-8 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
             {steps.map(([t, b], i) => (
-              <Item as="li" key={t}>
+              <li key={t}>
                 <div className="flex items-center gap-2">
                   <span className={cn('grid size-6 place-items-center rounded-[6px] font-mono text-[11px] font-medium', 'bg-raised text-ink-2')}>{i + 1}</span>
                   <span aria-hidden className="h-px flex-1 bg-line-2 max-lg:hidden" />
                 </div>
                 <p className="mt-4 font-display text-[17px] font-semibold tracking-[-0.03em]">{t}</p>
                 <p className="mt-2 text-[14px] leading-relaxed text-ink-2">{b}</p>
-              </Item>
+              </li>
             ))}
-          </Stagger>
+          </ol>
         </div>
       </section>
     </>

@@ -9,4 +9,3 @@ export const EASE_IN_OUT = [0.65, 0, 0.35, 1] as const // things that travel acr
 export const SPRING_UI = { type: 'spring', stiffness: 520, damping: 42 } as const // indicators that slide
 export const SPRING_SOFT = { type: 'spring', stiffness: 260, damping: 30 } as const // panels
 export const DUR = { fast: 0.18, base: 0.32, slow: 0.6, draw: 1.1 } as const
-export const VIEWPORT = { once: true, margin: '0px 0px -12% 0px' } as const

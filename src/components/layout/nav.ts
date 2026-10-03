@@ -1,10 +1,7 @@
-import { BookOpen, Gavel, LayoutGrid, Plus, ShieldAlert } from 'lucide-react'
-
 export const nav = [
-  { to: '/', label: 'Board', icon: LayoutGrid },
-  { to: '/verify', label: 'Verify', icon: Gavel },
-  { to: '/launch', label: 'Launch', icon: Plus },
-  { to: '/defaults', label: 'Defaults', icon: ShieldAlert },
-  { to: '/rules', label: 'Rules', icon: BookOpen },
+  { to: '/', label: 'Board', hint: 'Every token and its covenant' },
+  { to: '/verify', label: 'Verify', hint: 'Proof waiting on verifiers' },
+  { to: '/defaults', label: 'Defaults', hint: 'Redemptions and takeovers' },
+  { to: '/rules', label: 'Rules', hint: 'How a covenant works' },
 ]
 export const docsUrl = '#'

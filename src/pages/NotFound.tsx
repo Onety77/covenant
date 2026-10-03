@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/Button'
 /** A broken link, drawn as a broken term: the roadmap stops short of its gate. */
 export function NotFound() {
   return (
-    <div className="wrap flex flex-col items-start pt-16 pb-28 lg:pt-24">
+    <div className="wrap flex flex-col items-start pt-16 pb-24 lg:pt-24">
       <div aria-hidden className="flex w-full max-w-sm items-center gap-1">
         <div className="h-1.5 flex-[3] rounded-l-full bg-ink-2" />
         <div className="h-1.5 flex-[2] bg-line-2" />

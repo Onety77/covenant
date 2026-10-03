@@ -6,7 +6,7 @@ import { cn } from '@/lib/cn'
 import { ago, date, left } from '@/lib/format'
 import { due, statusLabel, tally } from '@/lib/covenant'
 import { AnimatePresence, m as M } from 'motion/react'
-import { EASE_OUT, EASE_UI, VIEWPORT } from '@/lib/motion'
+import { EASE_UI } from '@/lib/motion'
 import { PanelVotes } from './PanelVotes'
 import { VoteDots } from './VoteDots'
 
@@ -49,14 +49,7 @@ function Item({ c, m, now, last, href }: { c: Covenant; m: Milestone; now: numbe
   const k = tone(m)
 
   return (
-    <M.li
-      id={`m${m.n}`}
-      className="relative grid scroll-mt-24 grid-cols-[28px_1fr] gap-x-4 pb-10 last:pb-0"
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={VIEWPORT}
-      transition={{ duration: 0.55, ease: EASE_OUT }}
-    >
+    <li id={`m${m.n}`} className="relative grid scroll-mt-24 grid-cols-[28px_1fr] gap-x-4 pb-10 last:pb-0">
       {!last && <span aria-hidden className="absolute top-8 bottom-1 left-[13.5px] w-px bg-line-2" />}
       <span
         aria-hidden
@@ -149,7 +142,7 @@ function Item({ c, m, now, last, href }: { c: Covenant; m: Milestone; now: numbe
           </div>
         )}
       </div>
-    </M.li>
+    </li>
   )
 }
 

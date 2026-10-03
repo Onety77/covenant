@@ -88,7 +88,7 @@ export function Launch() {
 
   if (phase === 'done') {
     return (
-      <div className="wrap pt-10 pb-28 lg:py-20">
+      <div className="wrap pt-10 pb-16 lg:py-20">
         <div className="max-w-2xl">
           <p className="flex items-center gap-2 text-[13px] text-ink-2"><span aria-hidden className="size-1.5 rounded-full bg-proven" />Covenant signed</p>
           <h1 className="mt-3 text-h1">
@@ -137,7 +137,7 @@ export function Launch() {
         </div>
       </div>
 
-      <div className="wrap pt-6 pb-28 lg:pt-12 lg:pb-16">
+      <div className="wrap pt-6 pb-16 lg:pt-12">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <h1 className="text-h1">Launch a token</h1>
           <button type="button" onClick={() => setD(example)} className="text-[13px] font-semibold text-ink-2 underline decoration-line-2 underline-offset-4 hover-device:hover:text-ink">

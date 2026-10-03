@@ -5,7 +5,7 @@ import { docsUrl } from './nav'
 /** One quiet footer for every page. */
 export function Footer() {
   return (
-    <footer className="border-t border-line pb-20 lg:pb-0">
+    <footer className="border-t border-line">
       <div className="wrap flex flex-col gap-6 py-8 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
           <Logo />

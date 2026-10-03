@@ -1,7 +1,5 @@
 import type { Covenant } from '@/types'
-import { m as M } from 'motion/react'
 import { cn } from '@/lib/cn'
-import { EASE_OUT, VIEWPORT } from '@/lib/motion'
 import { dayOf, provenCount } from '@/lib/covenant'
 
 /**
@@ -21,14 +19,7 @@ export function Meter({ covenant: c, now, className }: { covenant: Covenant; now
         return (
           <div key={m.n} className="relative h-full overflow-hidden rounded-full bg-line-2" style={{ flex: m.dueDay - a }}>
             <div className="absolute inset-y-0 left-0" style={{ width: `${(full ? 1 : share) * 100}%` }}>
-              <M.div
-                className={cn('h-full rounded-full', fill)}
-                style={{ transformOrigin: 'left center' }}
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={VIEWPORT}
-                transition={{ duration: 0.55, delay: 0.1 + i * 0.18, ease: EASE_OUT }}
-              />
+              <div className={cn('h-full rounded-full', fill)} />
             </div>
           </div>
         )

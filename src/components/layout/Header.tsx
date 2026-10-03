@@ -8,6 +8,7 @@ import { nav } from './nav'
 import { useWallet } from './wallet'
 import { SearchBox } from '@/components/search/SearchBox'
 import { SearchSheet } from '@/components/search/SearchSheet'
+import { MobileMenu } from './MobileMenu'
 
 export function Header() {
   const { address, connect } = useWallet()
@@ -19,24 +20,22 @@ export function Header() {
         </Link>
         <nav aria-label="Main" className="hidden lg:block">
           <ul className="flex items-center gap-1">
-            {nav
-              .filter((n) => n.to !== '/launch')
-              .map((n) => (
-                <li key={n.to}>
-                  <NavLink
-                    to={n.to}
-                    end={n.to === '/'}
-                    className={({ isActive }) => cn('relative flex h-9 items-center rounded-[9px] px-3 text-[14px] font-medium transition-colors', isActive ? 'text-ink' : 'text-ink-3 hover-device:hover:text-ink')}
-                  >
-                    {({ isActive }) => (
-                      <>
-                        {isActive && <m.span layoutId="nav-pill" className="absolute inset-0 rounded-[9px] bg-raised" transition={SPRING_UI} />}
-                        <span className="relative">{n.label}</span>
-                      </>
-                    )}
-                  </NavLink>
-                </li>
-              ))}
+            {nav.map((n) => (
+              <li key={n.to}>
+                <NavLink
+                  to={n.to}
+                  end={n.to === '/'}
+                  className={({ isActive }) => cn('relative flex h-9 items-center rounded-[9px] px-3 text-[14px] font-medium transition-colors', isActive ? 'text-ink' : 'text-ink-3 hover-device:hover:text-ink')}
+                >
+                  {({ isActive }) => (
+                    <>
+                      {isActive && <m.span layoutId="nav-pill" className="absolute inset-0 rounded-[9px] bg-raised" transition={SPRING_UI} />}
+                      <span className="relative">{n.label}</span>
+                    </>
+                  )}
+                </NavLink>
+              </li>
+            ))}
           </ul>
         </nav>
         <SearchBox className="ml-auto hidden w-64 md:block lg:w-72" />
@@ -48,6 +47,7 @@ export function Header() {
           <Button variant="primary" to="/launch" className="max-lg:hidden">
             Launch a token
           </Button>
+          <MobileMenu className="sm:size-10 lg:hidden" />
         </div>
       </div>
     </header>

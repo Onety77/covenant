@@ -19,7 +19,7 @@ export function Defaults() {
   const past = projects.flatMap((p) => (p.previous ?? []).filter((c) => c.default).map((c) => ({ project: p, covenant: c })))
 
   return (
-    <div className="pb-24 lg:pb-16">
+    <div className="pb-16">
       <div className="wrap pt-8 lg:pt-12">
         <h1 className="text-h1">Defaults</h1>
         <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-ink-2">

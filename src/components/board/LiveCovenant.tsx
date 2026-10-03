@@ -43,7 +43,7 @@ export function LiveCovenant({ project: p, now, drawDelay = 0, className }: { pr
         </header>
 
         <div className="px-5 pt-6 pb-5 sm:px-6">
-          <TermRail covenant={c} now={now} stacked delay={drawDelay} />
+          <TermRail covenant={c} now={now} stacked draw delay={drawDelay} />
         </div>
 
         <footer className="flex flex-wrap items-center gap-x-4 gap-y-3 border-t border-line bg-[color-mix(in_srgb,var(--surface)_60%,var(--bg))] px-5 py-4 sm:px-6">

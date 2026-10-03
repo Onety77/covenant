@@ -106,7 +106,7 @@ export function ProjectPage() {
 
   return (
     <>
-      <div className="wrap pt-5 pb-36 lg:pt-8 lg:pb-16">
+      <div className="wrap pt-5 pb-28 lg:pt-8 lg:pb-16">
         <header className="flex flex-wrap items-center gap-x-6 gap-y-4">
           <div className="flex min-w-0 flex-1 items-center gap-3.5">
             <TokenArt seed={p.ticker} src={p.image} size={56} />
@@ -228,8 +228,8 @@ export function ProjectPage() {
       </div>
 
       {/* phones: the action stays pinned above the tab bar */}
-      <div className="fixed inset-x-0 bottom-[calc(64px+env(safe-area-inset-bottom))] z-30 border-t border-line bg-[color-mix(in_srgb,var(--bg)_94%,transparent)] backdrop-blur-md lg:hidden">
-        <div className="wrap flex gap-2 py-2.5">
+      <div className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-[color-mix(in_srgb,var(--bg)_94%,transparent)] backdrop-blur-md lg:hidden">
+        <div className="wrap flex gap-2 pt-2.5 pb-[max(10px,env(safe-area-inset-bottom))]">
           {defaulted ? (
             <Button variant="danger" to="#redeem" className="h-11 flex-1">
               Redeem · {sol(c.default!.poolSol, 0)} pool

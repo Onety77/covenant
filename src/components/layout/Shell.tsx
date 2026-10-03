@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { m } from 'motion/react'
 import { EASE_OUT } from '@/lib/motion'
-import { BottomNav } from './BottomNav'
 import { Footer } from './Footer'
 import { Header } from './Header'
 import { WalletCtx } from './wallet'
@@ -32,7 +31,6 @@ export function Shell() {
         </m.div>
       </main>
       <Footer />
-      <BottomNav />
     </WalletCtx.Provider>
   )
 }

@@ -82,7 +82,7 @@ export function Rules() {
   const now = useNow()
   const kiln = getProject('kiln')!
   return (
-    <div className="wrap pt-8 pb-24 lg:pt-12 lg:pb-16">
+    <div className="wrap pt-8 pb-16 lg:pt-12">
       <h1 className="text-h1">Rules</h1>
       <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-ink-2">Few rules, and none of them bend. In the order a launch meets them.</p>
 
